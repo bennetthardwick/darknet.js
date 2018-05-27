@@ -67,7 +67,7 @@ export class Darknet {
             'get_metadata': [ METADATA, [ 'string' ]],
         });
 
-        this.net = this.darknet.load_network('rubbish.cfg', '/home/bennett/git/darknet/rubbish.weights', 0);
+        this.net = this.darknet.load_network(config.config, config.weights, 0);
 
     }
 
