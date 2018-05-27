@@ -1,9 +1,10 @@
 {
   "name": "darknet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "darknet.js",
   "typings": "darknet.d.ts",
+  "git": "https://github.com/bennetthardwick/darknet.js",
   "scripts": {
     "test": "echo \"AIN'T NOBODY GOT TIME FOR THAT!\" && exit 1"
   },
