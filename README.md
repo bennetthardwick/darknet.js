@@ -29,7 +29,7 @@ console.log(darknet.detect('/image/of/a/dog/.jpg'));
 ```
 
 ### Async
-By default, darknet.js will run the detections synchronously. If this isn't your style, you can run detections asynchronously, using the `detectAsync`.
+By default, darknet.js will run the detections synchronously. If this isn't your style, you can run detections asynchronously, using the `detectAsync` method.
 ```typescript
 darknet.detectAsync('/image/of/a/dog/.jpg')
     .then(detections => console.log(detections));
