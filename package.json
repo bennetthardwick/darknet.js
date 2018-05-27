@@ -10,7 +10,7 @@
   },
   "keywords": [],
   "author": "Bennett Hardwick <bennetthardwick@icloud.com> (bennetthardwick.com)",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ffi": "^2.2.0",
     "ref": "^1.3.5",
