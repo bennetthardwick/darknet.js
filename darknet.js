@@ -37,6 +37,20 @@ var Darknet = /** @class */ (function () {
      * @param config
      */
     function Darknet(config) {
+        if (!config)
+            throw new Error("A config file is required");
+        if (!config.metadata)
+            throw new Error("Config file must include metadata section");
+        if (!config.metadata.names)
+            throw new Error("Metadata must include detection class names");
+        if (!config.metadata.classes)
+            throw new Error("Metadata must include detection class count");
+        if (!config.config)
+            throw new Error("Config must include location to yolo config file");
+        if (!config.library)
+            throw new Error("Config must include the location to 'libdarknet' file");
+        if (!config.weights)
+            throw new Error("config must include the path to trained weights");
         this.names = config.metadata.names;
         this.meta = new METADATA;
         this.meta.classes = config.metadata.classes;
@@ -51,7 +65,7 @@ var Darknet = /** @class */ (function () {
             'load_network': ['pointer', ['string', 'string', 'int']],
             'get_metadata': [METADATA, ['string']],
         });
-        this.net = this.darknet.load_network('rubbish.cfg', '/home/bennett/git/darknet/rubbish.weights', 0);
+        this.net = this.darknet.load_network(config.config, config.weights, 0);
     }
     Darknet.prototype.getArrayFromBuffer = function (buffer, length, type) {
         var array = [];
@@ -144,12 +158,3 @@ var Darknet = /** @class */ (function () {
     return Darknet;
 }());
 exports.Darknet = Darknet;
-var dark = new Darknet({
-    weights: './rubbish.weights',
-    config: './rubbish.cfg',
-    metadata: {
-        classes: 2,
-        names: ['coke', 'bottle']
-    },
-    library: './libdarknet'
-});

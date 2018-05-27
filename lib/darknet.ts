@@ -50,6 +50,14 @@ export class Darknet {
      */
     constructor(config: IDarknetConfig) {
 
+        if (!config) throw new Error("A config file is required");
+        if (!config.metadata) throw new Error("Config file must include metadata section");
+        if (!config.metadata.names) throw new Error("Metadata must include detection class names");
+        if (!config.metadata.classes) throw new Error("Metadata must include detection class count");
+        if (!config.config) throw new Error("Config must include location to yolo config file");
+        if (!config.library) throw new Error("Config must include the location to 'libdarknet' file");
+        if (!config.weights) throw new Error("config must include the path to trained weights");
+
         this.names = config.metadata.names;
 
         this.meta = new METADATA;
