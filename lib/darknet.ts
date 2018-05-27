@@ -51,18 +51,16 @@ export class Darknet {
     constructor(config: IDarknetConfig) {
 
         if (!config) throw new Error("A config file is required");
-        if (!config.metadata) throw new Error("Config file must include metadata section");
-        if (!config.metadata.names) throw new Error("Metadata must include detection class names");
-        if (!config.metadata.classes) throw new Error("Metadata must include detection class count");
+        if (!config.names) throw new Error("Config must include detection class names");
         if (!config.config) throw new Error("Config must include location to yolo config file");
         if (!config.library) throw new Error("Config must include the location to 'libdarknet' file");
         if (!config.weights) throw new Error("config must include the path to trained weights");
 
-        this.names = config.metadata.names;
+        this.names = config.names;
 
         this.meta = new METADATA;
-        this.meta.classes = config.metadata.classes;
-        this.meta.names = config.metadata.names.join('\n');
+        this.meta.classes = this.names.length;
+        this.meta.names = this.names.join('\n');
 
         this.darknet = ffi.Library(config.library, {
             'load_image_color': [ IMAGE, [ 'string', 'int', 'int' ]],
@@ -188,7 +186,7 @@ export type IClasses = string[]
 export interface IDarknetConfig {
     weights: string;
     config: string;
-    metadata: Metadata;
+    names: string[];
     library: string;
 }
 
@@ -202,8 +200,3 @@ export interface Detection {
         h: number;
     };
 }
-
-export interface Metadata {
-    classes: number;
-    names: IClasses
-} 
