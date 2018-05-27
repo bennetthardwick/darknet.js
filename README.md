@@ -1,3 +1,6 @@
+# Darknet.JS
+Just when you thought the world was beautiful, I put YOLO into JavaScript.
+
 ## Example
 ```typescript
 import { Darknet } from 'darknet.js';
