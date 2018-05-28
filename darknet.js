@@ -31,7 +31,7 @@ var METADATA = Struct({
     'names': 'string'
 });
 var detection_pointer = ref.refType(DETECTION);
-var library = "./libdarknet";
+var library = __dirname + "/libdarknet";
 var Darknet = /** @class */ (function () {
     /**
      * A new instance of rjreddie's darknet. Create an instance as soon as possible in your app, because it takes a while to init.

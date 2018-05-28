@@ -1,6 +1,6 @@
 {
   "name": "darknet",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "",
   "main": "darknet.js",
   "typings": "darknet.d.ts",
@@ -8,7 +8,8 @@
   "homepage": "https://github.com/bennetthardwick/darknet.js",
   "scripts": {
     "test": "echo \"AIN'T NOBODY GOT TIME FOR THAT!\" && exit 1",
-    "install": "git clone https://github.com/pjreddie/darknet && cd darknet && make && cp libdarknet* .. || echo \"Already built darknet\""
+    "install": "git clone https://github.com/pjreddie/darknet && cd darknet && make && cp libdarknet* .. || echo \"Already built darknet\"",
+		"prepublish": "tsc"
   },
   "keywords": [
     "darknet",
