@@ -36,6 +36,8 @@ const METADATA = Struct({
 
 const detection_pointer = ref.refType(DETECTION);
 
+const library = "./libdarknet";
+
 export class Darknet {
 
     darknet: any;
@@ -53,7 +55,6 @@ export class Darknet {
         if (!config) throw new Error("A config file is required");
         if (!config.names) throw new Error("Config must include detection class names");
         if (!config.config) throw new Error("Config must include location to yolo config file");
-        if (!config.library) throw new Error("Config must include the location to 'libdarknet' file");
         if (!config.weights) throw new Error("config must include the path to trained weights");
 
         this.names = config.names;
@@ -62,7 +63,7 @@ export class Darknet {
         this.meta.classes = this.names.length;
         this.meta.names = this.names.join('\n');
 
-        this.darknet = ffi.Library(config.library, {
+        this.darknet = ffi.Library(library, {
             'load_image_color': [ IMAGE, [ 'string', 'int', 'int' ]],
             'network_predict_image': [ float_pointer, [ 'pointer', IMAGE ]],
             'get_network_boxes': [ detection_pointer, [ 'pointer', 'int', 'int', 'float', 'float', int_pointer, 'int', int_pointer ]],
@@ -187,7 +188,6 @@ export interface IDarknetConfig {
     weights: string;
     config: string;
     names: string[];
-    library: string;
 }
 
 export interface Detection {

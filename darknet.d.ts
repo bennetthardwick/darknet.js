@@ -35,7 +35,6 @@ export interface IDarknetConfig {
     weights: string;
     config: string;
     names: string[];
-    library: string;
 }
 export interface Detection {
     name: string;

@@ -31,6 +31,7 @@ var METADATA = Struct({
     'names': 'string'
 });
 var detection_pointer = ref.refType(DETECTION);
+var library = "./libdarknet";
 var Darknet = /** @class */ (function () {
     /**
      * A new instance of rjreddie's darknet. Create an instance as soon as possible in your app, because it takes a while to init.
@@ -43,15 +44,13 @@ var Darknet = /** @class */ (function () {
             throw new Error("Config must include detection class names");
         if (!config.config)
             throw new Error("Config must include location to yolo config file");
-        if (!config.library)
-            throw new Error("Config must include the location to 'libdarknet' file");
         if (!config.weights)
             throw new Error("config must include the path to trained weights");
         this.names = config.names;
         this.meta = new METADATA;
         this.meta.classes = this.names.length;
         this.meta.names = this.names.join('\n');
-        this.darknet = ffi.Library(config.library, {
+        this.darknet = ffi.Library(library, {
             'load_image_color': [IMAGE, ['string', 'int', 'int']],
             'network_predict_image': [float_pointer, ['pointer', IMAGE]],
             'get_network_boxes': [detection_pointer, ['pointer', 'int', 'int', 'float', 'float', int_pointer, 'int', int_pointer]],
