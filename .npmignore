@@ -1,2 +1,5 @@
 lib/
+examples/
+darknet/
+libdarknet*
 tsconfig.json
