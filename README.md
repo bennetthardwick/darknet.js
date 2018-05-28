@@ -9,10 +9,14 @@ If you've built darknet, you can go ahead and install darknet.js by running:
 npm install darknet
 ```
 
+If you want to run the examples, you can run the command
+```
+npm install
+```
+
 ## Usage
 To create an instance of darknet.js, you need a four things. The trained weights, the configuration file they were trained with, a list of the names of all the objects (in order), and the `libdarknet.so` file.
 
-### Example
 ```typescript
 import { Darknet } from 'darknet';
 
@@ -21,17 +25,19 @@ let darknet = new Darknet({
     weights: './cats.weights',
     config: './cats.cfg',
     names: [ 'dog', 'cat' ]
-    library: './libdarknet'
 });
 
 // Detect
 console.log(darknet.detect('/image/of/a/dog/.jpg'));
 ```
+
 ### Example configuration
 You can download pre-trained weights and configuration from pjreddie's website. The latest version (yolov3-tiny) is linked below: 
 - [weights](https://pjreddie.com/media/files/yolov3-tiny.weights)
 - [config](https://github.com/pjreddie/darknet/blob/master/cfg/yolov3-tiny.cfg)
 - [names](https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names)
+
+If you don't want to download that stuff manually, navigate to the `examples` directory and issue the `./example` command. This will download the necessary files and run some detections.
 
 ### Async
 By default, darknet.js will run the detections synchronously. If this isn't your style, you can run detections asynchronously, using the `detectAsync` method.

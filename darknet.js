@@ -51,7 +51,7 @@ var Darknet = /** @class */ (function () {
             throw new Error("Config must include location to yolo config file");
         if (!config.weights)
             throw new Error("config must include the path to trained weights");
-        this.names = config.names;
+        this.names = config.names.filter(function (a) { return a.split("").length > 0; });
         this.meta = new METADATA;
         this.meta.classes = this.names.length;
         this.meta.names = this.names.join('\n');

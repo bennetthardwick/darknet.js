@@ -1,3 +1,10 @@
 node_modules/
 libdarknet*
 darknet/
+
+examples/dog.jpg
+examples/eagle.jpg
+examples/giraffe.jpg
+examples/yolov3-tiny.cfg
+examples/yolov3-tiny.weights
+examples/coco.names

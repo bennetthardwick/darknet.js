@@ -60,7 +60,7 @@ export class Darknet {
         if (!config.config) throw new Error("Config must include location to yolo config file");
         if (!config.weights) throw new Error("config must include the path to trained weights");
 
-        this.names = config.names;
+        this.names = config.names.filter(a => a.split("").length > 0);
 
         this.meta = new METADATA;
         this.meta.classes = this.names.length;
