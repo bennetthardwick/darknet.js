@@ -27,6 +27,11 @@ let darknet = new Darknet({
 // Detect
 console.log(darknet.detect('/image/of/a/dog/.jpg'));
 ```
+### Example configuration
+You can download pre-trained weights and configuration from pjreddie's website. The latest version (yolov3-tiny) is linked below: 
+- [weights](https://pjreddie.com/media/files/yolov3-tiny.weights)
+- [config](https://github.com/pjreddie/darknet/blob/master/cfg/yolov3-tiny.cfg)
+- [names](https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names)
 
 ### Async
 By default, darknet.js will run the detections synchronously. If this isn't your style, you can run detections asynchronously, using the `detectAsync` method.
