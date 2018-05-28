@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ffi = require("ffi");
 var ref = require("ref");
 var Struct = require("ref-struct");
+var fs_1 = require("fs");
 var char_pointer = ref.refType('char');
 var float_pointer = ref.refType('float');
 var int_pointer = ref.refType('int');
@@ -40,8 +41,12 @@ var Darknet = /** @class */ (function () {
     function Darknet(config) {
         if (!config)
             throw new Error("A config file is required");
-        if (!config.names)
+        if (!config.names && !config.namefile)
             throw new Error("Config must include detection class names");
+        if (!config.names && config.namefile)
+            config.names = fs_1.readFileSync(config.namefile, 'utf8').split('\n');
+        if (!config.names)
+            throw new Error("No names detected.");
         if (!config.config)
             throw new Error("Config must include location to yolo config file");
         if (!config.weights)

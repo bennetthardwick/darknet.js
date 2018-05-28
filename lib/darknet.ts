@@ -1,6 +1,7 @@
 import * as ffi from 'ffi';
 import * as ref from 'ref';
 import * as Struct from 'ref-struct';
+import { readFileSync } from 'fs';
 
 const char_pointer = ref.refType('char');
 const float_pointer = ref.refType('float');
@@ -53,7 +54,9 @@ export class Darknet {
     constructor(config: IDarknetConfig) {
 
         if (!config) throw new Error("A config file is required");
-        if (!config.names) throw new Error("Config must include detection class names");
+        if (!config.names && !config.namefile) throw new Error("Config must include detection class names");
+        if (!config.names && config.namefile) config.names = readFileSync(config.namefile, 'utf8').split('\n');
+        if (!config.names) throw new Error("No names detected.");
         if (!config.config) throw new Error("Config must include location to yolo config file");
         if (!config.weights) throw new Error("config must include the path to trained weights");
 
@@ -187,7 +190,8 @@ export type IClasses = string[]
 export interface IDarknetConfig {
     weights: string;
     config: string;
-    names: string[];
+    names?: string[];
+    namefile?: string;
 }
 
 export interface Detection {

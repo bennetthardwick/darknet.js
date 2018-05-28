@@ -34,7 +34,8 @@ export declare type IClasses = string[];
 export interface IDarknetConfig {
     weights: string;
     config: string;
-    names: string[];
+    names?: string[];
+    namefile?: string;
 }
 export interface Detection {
     name: string;
