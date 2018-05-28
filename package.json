@@ -1,6 +1,6 @@
 {
   "name": "darknet",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "darknet.js",
   "typings": "darknet.d.ts",
@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"AIN'T NOBODY GOT TIME FOR THAT!\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [ "darknet", "yolo", "yolov3", "yolov3-tiny", "object detection", "machine learning" ],
   "author": "Bennett Hardwick <bennetthardwick@icloud.com> (bennetthardwick.com)",
   "license": "MIT",
   "dependencies": {
