@@ -2,21 +2,18 @@
 Just when you thought the world was beautiful, I put YOLO into JavaScript.
 
 ## Installation
-To install, first clone your favourite blend of the pjreddie's [darknet](https://github.com/pjreddie/darknet) repository, and build it. Once it's built, there should be a file called `libdarknet` in the root directory. This is the file that darknet.js needs to work.
-
-If you've built darknet, you can go ahead and install darknet.js by running:
+Note: due to some [node ffi](https://github.com/node-ffi/node-ffi/issues/468) issues, this project only works with Node version `<=8.11.2`. If you're happy with that, go ahead and run the command: 
 ```
 npm install darknet
 ```
 
-If you want to run the examples, you can run the command
+If've cloned the repo and you want to run the examples, issue the command:
 ```
 npm install
 ```
 
 ## Usage
-To create an instance of darknet.js, you need a four things. The trained weights, the configuration file they were trained with, a list of the names of all the objects (in order), and the `libdarknet.so` file.
-
+To create an instance of darknet.js, you need a three things. The trained weights, the configuration file they were trained with and a list of the names of all the classes.
 ```typescript
 import { Darknet } from 'darknet';
 
