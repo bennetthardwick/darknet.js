@@ -1,15 +1,15 @@
 # Darknet.JS
-Just when you thought the world was beautiful, I put YOLO into JavaScript.
+A Node wrapper of pjreddie's open source neural network framework Darknet, using the Foreign Function Interface Library. Read: YOLOv3 in JavaScript.
+
+## Prerequisites
+- Linux, Windows (Linux sub-system), Mac (probably)
+- Node (most versions will work, darknet.js <=1.1.5 only works on node <=8.11.2)
+- Build tools (make, gcc, etc.)
 
 ## Installation
-Note: due to some [node ffi](https://github.com/node-ffi/node-ffi/issues/468) issues, this project only works with Node version `<=8.11.2`. If you're happy with that, go ahead and run the command: 
+Super easy, just install it with npm:
 ```
 npm install darknet
-```
-
-If've cloned the repo and you want to run the examples, issue the command:
-```
-npm install
 ```
 
 ## Usage
@@ -43,6 +43,9 @@ darknet.detectAsync('/image/of/a/dog/.jpg')
     .then(detections => console.log(detections));
 ```
 Unfortunately only Promises are supported at this time, but support for callbacks will be coming soon.
+
+## Activating Turbo Mode
+If you want to use CUDA, you'll have to enable it yourself. To do this, navigate to the directory where darknet.js is installed (`node_modules/darknet`), and edit the makefile inside the darknet repo, `darknet/Makefile` to say `GPU=1`. With this enabled, issue the command `make && cp libdarknet* ..` to compile darknet library and copy it to the root of darknet.js. After doing this, Darknet.js should work with your CUDA enabled GPU.
 
 ## Built-With
 - [Node FFI](https://github.com/node-ffi/node-ffi)
