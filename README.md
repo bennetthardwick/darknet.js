@@ -6,6 +6,15 @@ A Node wrapper of pjreddie's open source neural network framework Darknet, using
 - Node (most versions will work, darknet.js <=1.1.5 only works on node <=8.11.2)
 - Build tools (make, gcc, etc.)
 
+## Examples
+To run the examples, run the following commands:
+```
+git clone https://github.com/bennetthardwick/darknet.js.git darknet && cd darknet
+npm install
+./examples/example
+```
+Note: The example weights are quite large, the download might take some time
+
 ## Installation
 Super easy, just install it with npm:
 ```
@@ -28,7 +37,7 @@ let darknet = new Darknet({
 console.log(darknet.detect('/image/of/a/dog/.jpg'));
 ```
 
-### Example configuration
+### Example Configuration
 You can download pre-trained weights and configuration from pjreddie's website. The latest version (yolov3-tiny) is linked below: 
 - [weights](https://pjreddie.com/media/files/yolov3-tiny.weights)
 - [config](https://github.com/pjreddie/darknet/blob/master/cfg/yolov3-tiny.cfg)
