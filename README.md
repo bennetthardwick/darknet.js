@@ -34,7 +34,7 @@ let darknet = new Darknet({
 });
 
 // Detect
-console.log(darknet.detect('/image/of/a/dog/.jpg'));
+console.log(darknet.detect('/image/of/a/dog.jpg'));
 ```
 
 ### Example Configuration
@@ -48,7 +48,7 @@ If you don't want to download that stuff manually, navigate to the `examples` di
 ### Async
 By default, darknet.js will run the detections synchronously. If this isn't your style, you can run detections asynchronously, using the `detectAsync` method.
 ```typescript
-darknet.detectAsync('/image/of/a/dog/.jpg')
+darknet.detectAsync('/image/of/a/dog.jpg')
     .then(detections => console.log(detections));
 ```
 Unfortunately only Promises are supported at this time, but support for callbacks will be coming soon.
