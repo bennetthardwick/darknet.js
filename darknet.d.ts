@@ -1,3 +1,4 @@
+/// <reference types="node" />
 export declare class Darknet {
     darknet: any;
     meta: any;
@@ -8,27 +9,48 @@ export declare class Darknet {
      * @param config
      */
     constructor(config: IDarknetConfig);
-    private getArrayFromBuffer(buffer, length, type);
-    private bufferToDetections(buffer, length);
-    private _detectSync(net, meta, image, thresh?, hier_thresh?, nms?);
+    private getArrayFromBuffer;
+    private bufferToDetections;
+    private _detectSync;
+    private _detectAsync;
     /**
      * Synchronously detect objects in an image.
      * @param image the destination of the image to be detected
      * @param config optional configuration (threshold, etc.)
      */
-    detect(image: string, config?: IConfig): Detection[];
+    detect(image: string | IBufferImage, config?: IConfig): Detection[];
+    getImageFromPath(path: string): any;
+    getImageFromPathAsync(path: String): Promise<{}>;
+    imageToRGBBuffer(image: any): Buffer;
+    private rgbToDarknet;
+    RGBBufferToImage(buffer: Buffer, w: number, h: number, c: number): any;
+    /**
+     * Transform an RGB buffer to a darknet encoded image
+     * @param buffer - rgb buffer
+     * @param w - width
+     * @param h - height
+     * @param c - channels
+     * @returns Promise<IMAGE>
+     */
+    RGBBufferToImageAsync(buffer: Buffer, w: number, h: number, c: number): Promise<any>;
     /**
      * Asynchronously detect objects in an image.
      * @param image
      * @param config
      * @returns A promise
      */
-    detectAsync(image: string, config?: IConfig): Promise<Detection[]>;
+    detectAsync(image: string | IBufferImage, config?: IConfig): Promise<Detection[]>;
 }
 export interface IConfig {
     thresh?: number;
     hier_thresh?: number;
     nms?: number;
+}
+export interface IBufferImage {
+    b: Buffer;
+    w: number;
+    h: number;
+    c: number;
 }
 export declare type IClasses = string[];
 export interface IDarknetConfig {
