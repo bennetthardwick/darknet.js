@@ -8,7 +8,7 @@
   "homepage": "https://github.com/bennetthardwick/darknet.js",
   "scripts": {
     "test": "echo \"AIN'T NOBODY GOT TIME FOR THAT!\" && exit 1",
-    "install": "git clone https://github.com/pjreddie/darknet && cd darknet && make && cp libdarknet* .. || echo \"Already built darknet\"",
+    "install": "./install-script.sh",
     "prepare": "tsc"
   },
   "keywords": [
