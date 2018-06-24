@@ -67,11 +67,12 @@ export class Darknet {
         this.meta.names = this.names.join('\n');
 
         this.darknet = ffi.Library(library, {
+            'float_to_image': [ IMAGE, [ 'int', 'int', 'int', float_pointer ]],
             'load_image_color': [ IMAGE, [ 'string', 'int', 'int' ]],
             'network_predict_image': [ float_pointer, [ 'pointer', IMAGE ]],
             'get_network_boxes': [ detection_pointer, [ 'pointer', 'int', 'int', 'float', 'float', int_pointer, 'int', int_pointer ]],
             'do_nms_obj': [ 'void', [ detection_pointer, 'int', 'int', 'float' ]],
-            'free_image': [ 'void', [ IMAGE ]], 
+            'free_image': [ 'void', [ IMAGE ]],
             'free_detections': [ 'void', [ detection_pointer, 'int' ]],
             'load_network': [ 'pointer', [ 'string', 'string', 'int' ]],
             'get_metadata': [ METADATA, [ 'string' ]],
@@ -84,7 +85,7 @@ export class Darknet {
     private getArrayFromBuffer(buffer: Buffer, length: number, type: ref.Type): number[] {
         let array = [];
         for (let i = 0; i < length; i++) {
-            array.push(ref.get(ref.reinterpret(buffer, type.size, i * type.size), 0, type));                        
+            array.push(ref.get(ref.reinterpret(buffer, type.size, i * type.size), 0, type));
         }
         return array;
     }
@@ -92,15 +93,15 @@ export class Darknet {
     private bufferToDetections(buffer: Buffer, length: number): Detection[] {
         let detections: Detection[] = [];
         for (let i = 0; i < length; i++) {
-            let det = ref.get(ref.reinterpret(buffer, 48, i * DETECTION.size), 0, DETECTION)
+            let det = ref.get(ref.reinterpret(buffer, 48, i * DETECTION.size), 0, DETECTION);
             let prob = this.getArrayFromBuffer(det.prob, this.meta.classes, ref.types.float);
 
             for (let j = 0; j < this.meta.classes; j++) {
                 if (prob[j] > 0) {
                     let b = det.bbox;
-                    detections.push({ 
-                        name: this.names[j], 
-                        prob: prob[j], 
+                    detections.push({
+                        name: this.names[j],
+                        prob: prob[j],
                         box: {
                             x: b.x,
                             y: b.y,
@@ -114,67 +115,227 @@ export class Darknet {
         return detections;
     }
 
-    private _detectSync(net: any, meta: any, image: string, thresh?: number, hier_thresh?: number, nms?: number): Detection[] {
+    private _detectSync(net: any, meta: any, image: any, thresh?: number, hier_thresh?: number, nms?: number): Detection[] {
         if (!thresh) thresh = 0.5;
         if (!hier_thresh) hier_thresh = 0.5;
         if (!nms) nms = 0.45;
 
-        let _image = this.darknet.load_image_color(image, 0, 0);
+        this.darknet.network_predict_image(net, image);
 
-        this.darknet.network_predict_image(net, _image);
-        
         let pnum = ref.alloc('int');
-        
-        let dets = this.darknet.get_network_boxes(net, _image.w, _image.h, thresh, hier_thresh, ref.NULL_POINTER, 0, pnum)
+
+        let dets = this.darknet.get_network_boxes(net, image.w, image.h, thresh, hier_thresh, ref.NULL_POINTER, 0, pnum);
         let num = (pnum as any).deref();
         this.darknet.do_nms_obj(dets, num, meta.classes, nms);
 
         let detections = this.bufferToDetections(dets, num);
 
-        this.darknet.free_image(_image);
         this.darknet.free_detections(dets, num);
 
         return detections;
     }
 
+    private async _detectAsync(net: any, meta: any, image: any, thresh?: number, hier_thresh?: number, nms?: number): Promise<Detection[]> {
+
+        await new Promise((res, rej) =>
+            this.darknet.network_predict_image.async(net, image, (e: any) => e ? rej(e) : res())
+        );
+        let pnum = ref.alloc('int');
+
+        const dets = await new Promise<Buffer>((res, rej) =>
+            this.darknet.get_network_boxes.async(
+                net,
+                image.w, image.h,
+                thresh, hier_thresh,
+                ref.NULL_POINTER, 0, pnum,
+                (err: any, dets: any) => err ? rej(err) : res(dets))
+        );
+        const num = (pnum as any).deref();
+
+        await new Promise((res, rej) =>
+            this.darknet.do_nms_obj.async(
+                dets, num, meta.classes, nms,
+                (e: any) => e ? rej(e) : res()
+            )
+        );
+
+        const detections = this.bufferToDetections(dets, num);
+        this.darknet.free_detections(dets, num);
+        return detections;
+    }
+
     /**
-     * Synchronously detect objects in an image. 
-     * @param image the destination of the image to be detected 
+     * Synchronously detect objects in an image.
+     * @param image the destination of the image to be detected
      * @param config optional configuration (threshold, etc.)
      */
-    detect(image: string, config?: IConfig) {
+    detect(image: string | IBufferImage, config?: IConfig) {
         if (!config) config = {};
-        return this._detectSync(this.net, this.meta, image, config.thresh, config.hier_thresh, config.nms);
+
+        const darkNetLoadedImage = typeof image === 'string';
+
+        const imageData = typeof image === 'string' ?
+            this.getImageFromPath(image) :
+            this.RGBBufferToImage(image.b, image.w, image.h, image.c);
+
+        const detection = this._detectSync(this.net, this.meta, imageData, config.thresh, config.hier_thresh, config.nms);
+
+        if (darkNetLoadedImage) {
+            // memory is owned by the darknet lib
+            this.darknet.free_image(imageData);
+        } else {
+            // memory is owned by JS and will GC eventually
+        }
+        return detection;
+    }
+
+    /**
+     * Get a Darknet Image from path
+     * @param path
+     * @returns IMAGE
+     */
+    getImageFromPath(path: string) {
+        return this.darknet.load_image_color(path, 0, 0);
+    }
+
+    /**
+     * Get a Darknet Image async from path
+     * @param path
+     * @returns Promise<IMAGE>
+     */
+    async getImageFromPathAsync(path: String) {
+        return new Promise((res, rej) =>
+            this.darknet.load_image_color.async(
+                path, 0, 0,
+                (e: any, image: any) => e ? rej(e) : res(image)
+            )
+        );
+    }
+
+    /**
+     * convert darknet image to rgb buffer
+     * @param {IMAGE} image
+     * @returns {Buffer}
+     */
+    imageToRGBBuffer(image: any) {
+        const w = image.w;
+        const h = image.h;
+        const c = image.c;
+
+        const imageElements = w * h * c;
+
+        const imageData = new Float32Array(
+            image.data.reinterpret(imageElements * Float32Array.BYTES_PER_ELEMENT, 0).buffer,
+            0,
+            imageElements
+        );
+
+        const rgbBuffer = Buffer.allocUnsafe(imageData.length);
+
+        const step = c * w;
+        let i, k, j;
+
+        for (i = 0; i < h; ++i) {
+            for (k = 0; k < c; ++k) {
+                for (j = 0; j < w; ++j) {
+                    rgbBuffer[i * step + j * c + k] = imageData[k * w * h + i * w + j] * 255;
+                }
+            }
+        }
+
+        return rgbBuffer;
+    }
+
+    private rgbToDarknet(buffer: Buffer, w: number, h: number, c: number): Float32Array {
+        const imageElements = w * h * c;
+        const floatBuff = new Float32Array(imageElements);
+        const step = w * c;
+
+        let i, k, j;
+
+        for (i = 0; i < h; ++i) {
+            for (k = 0; k < c; ++k) {
+                for (j = 0; j < w; ++j) {
+                    floatBuff[k * w * h + i * w + j] = buffer[i * step + j * c + k] / 255;
+                }
+            }
+        }
+
+        return floatBuff;
+    }
+
+    /**
+     * Transform an RGB buffer to a darknet encoded image
+     * @param buffer - rgb buffer
+     * @param w - width
+     * @param h - height
+     * @param c - channels
+     * @returns {IMAGE}
+     */
+    RGBBufferToImage(buffer: Buffer, w: number, h: number, c: number) {
+        const floatBuff = this.rgbToDarknet(buffer, w, h, c);
+
+        return this.darknet.float_to_image(
+            w, h, c,
+            new Uint8Array(
+                floatBuff.buffer,
+                0,
+                floatBuff.length * Float32Array.BYTES_PER_ELEMENT
+            )
+        );
+    }
+
+    /**
+     * Transform an RGB buffer to a darknet encoded image
+     * @param buffer - rgb buffer
+     * @param w - width
+     * @param h - height
+     * @param c - channels
+     * @returns {Promise<IMAGE>}
+     */
+    async RGBBufferToImageAsync(buffer: Buffer, w: number, h: number, c: number): Promise<any> {
+        const floatBuff = this.rgbToDarknet(buffer, w, h, c);
+
+        return new Promise((res, rej) => this.darknet.float_to_image.async(
+            w, h, c,
+            new Uint8Array(
+                floatBuff.buffer,
+                0,
+                floatBuff.length * Float32Array.BYTES_PER_ELEMENT
+            ),
+            (e: any, image: any) => e ? rej(e) : res(image)
+        ));
     }
 
     /**
      * Asynchronously detect objects in an image.
-     * @param image 
+     * @param image
      * @param config
-     * @returns A promise 
+     * @returns A promise
      */
-    detectAsync(image: string, config?: IConfig): Promise<Detection[]> {
+    async detectAsync(image: string | IBufferImage, config?: IConfig): Promise<Detection[]> {
         if (!config) config = {};
         let thresh = (config.thresh) ? config.thresh : 0.5;
         let hier_thresh = (config.hier_thresh) ? config.hier_thresh : 0.5;
         let nms = (config.nms) ? config.nms : 0.5;
 
-        return new Promise<Detection[]>((resolve: any, reject: any) => {
-            this.darknet.load_image_color.async(image, 0, 0, (err: any, _image: any) => {
-                this.darknet.network_predict_image.async(this.net, _image, () => {
-                    let pnum = ref.alloc('int');
-                    this.darknet.get_network_boxes.async(this.net, _image.w, _image.h, thresh, hier_thresh, ref.NULL_POINTER, 0, pnum, (err: any, dets: any) => {
-                        let num = (pnum as any).deref();
-                        this.darknet.do_nms_obj.async(dets, num, this.meta.classes, nms, () => {
-                            let detections = this.bufferToDetections(dets, num);
-                            this.darknet.free_image(_image);
-                            this.darknet.free_detections(dets, num);
-                            resolve(detections);
-                        });
-                    });
-                })
-            });
-        })
+        const darkNetLoadedImage = typeof image === 'string';
+
+        const imageData = typeof image === 'string' ?
+            await this.getImageFromPathAsync(image) :
+            await this.RGBBufferToImageAsync(image.b, image.w, image.h, image.c);
+
+        const detection = await this._detectAsync(this.net, this.meta, imageData, thresh, hier_thresh, nms);
+
+        if (darkNetLoadedImage) {
+            // memory is owned by the darknet lib
+            await new Promise((res, rej) =>
+                this.darknet.free_image.async(imageData, (e: any) => e ? rej(e) : res())
+            );
+        } else {
+            // memory is owned by JS and will GC eventually
+        }
+        return detection;
     }
 
 }
@@ -183,6 +344,13 @@ export interface IConfig {
     thresh?: number;
     hier_thresh?: number;
     nms?: number;
+}
+
+export interface IBufferImage {
+    b: Buffer,
+    w: number,
+    h: number,
+    c: number
 }
 
 export type IClasses = string[]
