@@ -9,20 +9,43 @@ export declare class Darknet {
      * @param config
      */
     constructor(config: IDarknetConfig);
-    private getArrayFromBuffer;
-    private bufferToDetections;
-    private _detectSync;
-    private _detectAsync;
+    private getArrayFromBuffer(buffer, length, type);
+    private bufferToDetections(buffer, length);
+    private _detectSync(net, meta, image, thresh?, hier_thresh?, nms?);
+    private _detectAsync(net, meta, image, thresh?, hier_thresh?, nms?);
     /**
      * Synchronously detect objects in an image.
      * @param image the destination of the image to be detected
      * @param config optional configuration (threshold, etc.)
      */
     detect(image: string | IBufferImage, config?: IConfig): Detection[];
+    /**
+     * Get a Darknet Image from path
+     * @param path
+     * @returns IMAGE
+     */
     getImageFromPath(path: string): any;
+    /**
+     * Get a Darknet Image async from path
+     * @param path
+     * @returns Promise<IMAGE>
+     */
     getImageFromPathAsync(path: String): Promise<{}>;
+    /**
+     * convert darknet image to rgb buffer
+     * @param {IMAGE} image
+     * @returns {Buffer}
+     */
     imageToRGBBuffer(image: any): Buffer;
-    private rgbToDarknet;
+    private rgbToDarknet(buffer, w, h, c);
+    /**
+     * Transform an RGB buffer to a darknet encoded image
+     * @param buffer - rgb buffer
+     * @param w - width
+     * @param h - height
+     * @param c - channels
+     * @returns {IMAGE}
+     */
     RGBBufferToImage(buffer: Buffer, w: number, h: number, c: number): any;
     /**
      * Transform an RGB buffer to a darknet encoded image
@@ -30,7 +53,7 @@ export declare class Darknet {
      * @param w - width
      * @param h - height
      * @param c - channels
-     * @returns Promise<IMAGE>
+     * @returns {Promise<IMAGE>}
      */
     RGBBufferToImageAsync(buffer: Buffer, w: number, h: number, c: number): Promise<any>;
     /**

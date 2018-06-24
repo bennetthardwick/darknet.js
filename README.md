@@ -2,7 +2,7 @@
 A Node wrapper of pjreddie's open source neural network framework Darknet, using the Foreign Function Interface Library. Read: YOLOv3 in JavaScript.
 
 ## Prerequisites
-- Linux, Windows (Linux sub-system), Mac (probably)
+- Linux, Mac, Windows (Linux sub-system),
 - Node (most versions will work, darknet.js <=1.1.5 only works on node <=8.11.2)
 - Build tools (make, gcc, etc.)
 
@@ -35,6 +35,34 @@ let darknet = new Darknet({
 
 // Detect
 console.log(darknet.detect('/image/of/a/dog.jpg'));
+```
+
+In conjuction with [opencv4nodejs](https://github.com/justadudewhohacks/opencv4nodejs), Darknet.js can also be used to detect objects inside videos.
+```javascript
+const fs = require('fs');
+const cv = require('opencv4nodejs');
+const { Darknet } = require('darknet');
+
+const darknet = new Darknet({
+  weights: 'yolov3.weights',
+  config: 'cfg/yolov3.cfg',
+  nameFile: 'data/coco.names'
+});
+
+const cap = new cv.VideoCapture('video.mp4');
+
+let frame;
+let index = 0;
+do {
+  frame = cap.read().cvtColor(cv.COLOR_BGR2RGB);
+  console.log('frame', index++); 
+  console.log(darknet.detect({
+    b: frame.getData(),
+    w: frame.cols,
+    h: frame.rows,
+    c: frame.channels
+  }));
+} while(!frame.empty);
 ```
 
 ### Example Configuration

@@ -151,8 +151,8 @@ var Darknet = /** @class */ (function () {
     };
     Darknet.prototype._detectAsync = function (net, meta, image, thresh, hier_thresh, nms) {
         return __awaiter(this, void 0, void 0, function () {
-            var pnum, dets, num, detections;
             var _this = this;
+            var pnum, dets, num, detections;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, new Promise(function (res, rej) {
@@ -201,9 +201,19 @@ var Darknet = /** @class */ (function () {
         }
         return detection;
     };
+    /**
+     * Get a Darknet Image from path
+     * @param path
+     * @returns IMAGE
+     */
     Darknet.prototype.getImageFromPath = function (path) {
         return this.darknet.load_image_color(path, 0, 0);
     };
+    /**
+     * Get a Darknet Image async from path
+     * @param path
+     * @returns Promise<IMAGE>
+     */
     Darknet.prototype.getImageFromPathAsync = function (path) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
@@ -214,6 +224,11 @@ var Darknet = /** @class */ (function () {
             });
         });
     };
+    /**
+     * convert darknet image to rgb buffer
+     * @param {IMAGE} image
+     * @returns {Buffer}
+     */
     Darknet.prototype.imageToRGBBuffer = function (image) {
         var w = image.w;
         var h = image.h;
@@ -246,6 +261,14 @@ var Darknet = /** @class */ (function () {
         }
         return floatBuff;
     };
+    /**
+     * Transform an RGB buffer to a darknet encoded image
+     * @param buffer - rgb buffer
+     * @param w - width
+     * @param h - height
+     * @param c - channels
+     * @returns {IMAGE}
+     */
     Darknet.prototype.RGBBufferToImage = function (buffer, w, h, c) {
         var floatBuff = this.rgbToDarknet(buffer, w, h, c);
         return this.darknet.float_to_image(w, h, c, new Uint8Array(floatBuff.buffer, 0, floatBuff.length * Float32Array.BYTES_PER_ELEMENT));
@@ -256,12 +279,12 @@ var Darknet = /** @class */ (function () {
      * @param w - width
      * @param h - height
      * @param c - channels
-     * @returns Promise<IMAGE>
+     * @returns {Promise<IMAGE>}
      */
     Darknet.prototype.RGBBufferToImageAsync = function (buffer, w, h, c) {
         return __awaiter(this, void 0, void 0, function () {
-            var floatBuff;
             var _this = this;
+            var floatBuff;
             return __generator(this, function (_a) {
                 floatBuff = this.rgbToDarknet(buffer, w, h, c);
                 return [2 /*return*/, new Promise(function (res, rej) { return _this.darknet.float_to_image.async(w, h, c, new Uint8Array(floatBuff.buffer, 0, floatBuff.length * Float32Array.BYTES_PER_ELEMENT), function (e, image) { return e ? rej(e) : res(image); }); })];
@@ -276,8 +299,8 @@ var Darknet = /** @class */ (function () {
      */
     Darknet.prototype.detectAsync = function (image, config) {
         return __awaiter(this, void 0, void 0, function () {
-            var thresh, hier_thresh, nms, darkNetLoadedImage, imageData, _a, detection;
             var _this = this;
+            var thresh, hier_thresh, nms, darkNetLoadedImage, imageData, _a, detection;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:

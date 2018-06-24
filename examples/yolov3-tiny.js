@@ -1,4 +1,4 @@
-const Darknet = require('../darknet').Darknet;
+const { Darknet } = require('../darknet');
 
 const darknet = new Darknet({
     weights: 'yolov3-tiny.weights',
