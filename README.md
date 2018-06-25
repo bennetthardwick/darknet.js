@@ -20,6 +20,12 @@ Super easy, just install it with npm:
 ```
 npm install darknet
 ```
+If you'd like to enable CUDA and/or CUDANN, export the flags `DARKNET_BUILD_WITH_GPU=1` for CUDA, and `DARKNET_BUILD_WITH_CUDNN=1` for CUDANN, and rebuild:
+```
+export DARKNET_BUILD_WITH_GPU=1
+export DARKNET_BUILD_WITH_CUDNN=1
+npm rebuild darknet
+```
 
 ## Usage
 To create an instance of darknet.js, you need a three things. The trained weights, the configuration file they were trained with and a list of the names of all the classes.
@@ -80,11 +86,6 @@ darknet.detectAsync('/image/of/a/dog.jpg')
     .then(detections => console.log(detections));
 ```
 Unfortunately only Promises are supported at this time, but support for callbacks will be coming soon.
-
-## Activating Turbo Mode
-If you want to use CUDA, you'll have to `export DARKNET_BUILD_WITH_GPU=1` before installing this package.
-You can also enable CUDNN if installed by adding `export DARKNET_BUILD_WITH_CUDNN=1`.
-After doing this, Darknet.js should work with your CUDA enabled GPU.
 
 ## Built-With
 - [Node FFI](https://github.com/node-ffi/node-ffi)
