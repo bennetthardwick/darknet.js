@@ -12,7 +12,25 @@ if [ ! -f libdarknet.so ]; then
     fi
 
     # dive in the darknet folder and make
-    cd darknet && make
+    cd darknet
+
+    # look for exported variables for GPU and CUDNN
+    GPU="${DARKNET_BUILD_WITH_GPU:-0}";
+    CUDNN="${DARKNET_BUILD_WITH_CUDNN:-0}";
+
+    case "$GPU" in
+        1|0);;
+        *) echo "Interpreting DARKNET_BUILD_WITH_GPU=$GPU as 0"; GPU=0;;
+    esac
+    case "$CUDNN" in
+        1|0);;
+        *) echo "Interpreting DARKNET_BUILD_WITH_CUDNN=$CUDNN as 0"; CUDNN=0;;
+    esac
+
+    sed -i -e "s/GPU=[01]/GPU=${GPU}/g" ./Makefile
+    sed -i -e "s/CUDNN=[01]/CUDNN=${CUDNN}/g" ./Makefile
+
+    make
 
     if [ $? -ne 0 ]; then
         echo "Could not compile darknet";

@@ -82,7 +82,9 @@ darknet.detectAsync('/image/of/a/dog.jpg')
 Unfortunately only Promises are supported at this time, but support for callbacks will be coming soon.
 
 ## Activating Turbo Mode
-If you want to use CUDA, you'll have to enable it yourself. To do this, navigate to the directory where darknet.js is installed (`node_modules/darknet`), and edit the makefile inside the darknet repo, `darknet/Makefile` to say `GPU=1`. With this enabled, issue the command `make && cp libdarknet* ..` to compile darknet library and copy it to the root of darknet.js. After doing this, Darknet.js should work with your CUDA enabled GPU.
+If you want to use CUDA, you'll have to `export DARKNET_BUILD_WITH_GPU=1` before installing this package.
+You can also enable CUDNN if installed by adding `export DARKNET_BUILD_WITH_CUDNN=1`.
+After doing this, Darknet.js should work with your CUDA enabled GPU.
 
 ## Built-With
 - [Node FFI](https://github.com/node-ffi/node-ffi)
