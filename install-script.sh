@@ -20,11 +20,11 @@ if [ ! -f libdarknet.so ]; then
 
     case "$GPU" in
         1|0);;
-        *) echo "Interpreting DARKNET_BUILD_WITH_GPU=$GPU as 1"; GPU=0;;
+        *) echo "Interpreting DARKNET_BUILD_WITH_GPU=$GPU as 0"; GPU=0;;
     esac
     case "$CUDNN" in
         1|0);;
-        *) echo "Interpreting DARKNET_BUILD_WITH_CUDNN=$CUDNN as 1"; CUDNN=0;;
+        *) echo "Interpreting DARKNET_BUILD_WITH_CUDNN=$CUDNN as 0"; CUDNN=0;;
     esac
 
     sed -i -e "s/GPU=[01]/GPU=${GPU}/g" ./Makefile
