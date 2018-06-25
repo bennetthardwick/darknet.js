@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"AIN'T NOBODY GOT TIME FOR THAT!\" && exit 1",
     "install": "./install-script.sh",
-    "prepare": "tsc"
+    "prepublishOnly": "tsc"
   },
   "keywords": [
     "darknet",
