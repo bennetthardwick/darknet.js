@@ -48,7 +48,7 @@ export class Darknet {
     names: string[];
 
     /**
-     * A new instance of rjreddie's darknet. Create an instance as soon as possible in your app, because it takes a while to init.
+     * A new instance of pjreddie's darknet. Create an instance as soon as possible in your app, because it takes a while to init.
      * @param config
      */
     constructor(config: IDarknetConfig) {
