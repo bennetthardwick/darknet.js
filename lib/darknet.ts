@@ -3,6 +3,7 @@ import * as ref from 'ref';
 import * as Struct from 'ref-struct';
 import { readFileSync } from 'fs';
 
+
 const char_pointer = ref.refType('char');
 const float_pointer = ref.refType('float');
 const int_pointer = ref.refType('int');
@@ -135,7 +136,7 @@ export class Darknet {
         return detections;
     }
 
-    private async _detectAsync(net: any, meta: any, image: any, thresh?: number, hier_thresh?: number, nms?: number): Promise<Detection[]> {
+    protected async _detectAsync(net: any, meta: any, image: any, thresh?: number, hier_thresh?: number, nms?: number): Promise<Detection[]> {
 
         await new Promise((res, rej) =>
             this.darknet.network_predict_image.async(net, image, (e: any) => e ? rej(e) : res())
@@ -372,3 +373,5 @@ export interface Detection {
         h: number;
     };
 }
+
+export { DarknetExperimental } from './detector';
