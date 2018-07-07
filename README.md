@@ -80,13 +80,26 @@ You can download pre-trained weights and configuration from pjreddie's website. 
 If you don't want to download that stuff manually, navigate to the `examples` directory and issue the `./example` command. This will download the necessary files and run some detections.
 
 ### Async
-By default, darknet.js will run the detections synchronously. If this isn't your style, you can run detections asynchronously, using the `detectAsync` method.
+By default, darknet.js will run the detections synchronously. If this isn't your style, you can run detections asynchronously, using the `detectAsync` method. 
 ```typescript
 darknet.detectAsync('/image/of/a/dog.jpg')
     .then(detections => console.log(detections));
 ```
-Unfortunately only Promises are supported at this time, but support for callbacks will be coming soon.
+At this time, async detections cannot be run in parallel and attempting to will cause your detections to be incorrect. The `DarknetExperimental` class has serial async. It is intended to eventually replace the original `Darknet` class:
+```typescript
+import { DarknetExperimental } from 'darknet';
 
+const darknet = new DarknetExperimental(config);
+
+darknet.detectAsync('/image/of/a/dog.jpg)
+  .then(detections => console.log(detections));
+  
+darknet.detectAsync('/image/of/a/cat.jpg)
+  .then(detections => console.log(detections));
+
+darknet.detectAsync('/image/of/an/eagle.jpg)
+  .then(detections => console.log(detections));
+```
 ## Built-With
 - [Node FFI](https://github.com/node-ffi/node-ffi)
 - [Ref](https://github.com/TooTallNate/ref)
