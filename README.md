@@ -91,13 +91,13 @@ import { DarknetExperimental } from 'darknet';
 
 const darknet = new DarknetExperimental(config);
 
-darknet.detectAsync('/image/of/a/dog.jpg)
+darknet.detectAsync('/image/of/a/dog.jpg')
   .then(detections => console.log(detections));
   
-darknet.detectAsync('/image/of/a/cat.jpg)
+darknet.detectAsync('/image/of/a/cat.jpg')
   .then(detections => console.log(detections));
 
-darknet.detectAsync('/image/of/an/eagle.jpg)
+darknet.detectAsync('/image/of/an/eagle.jpg')
   .then(detections => console.log(detections));
 ```
 ## Built-With
