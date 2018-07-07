@@ -5,14 +5,14 @@ export declare class Darknet {
     net: any;
     names: string[];
     /**
-     * A new instance of rjreddie's darknet. Create an instance as soon as possible in your app, because it takes a while to init.
+     * A new instance of pjreddie's darknet. Create an instance as soon as possible in your app, because it takes a while to init.
      * @param config
      */
     constructor(config: IDarknetConfig);
     private getArrayFromBuffer(buffer, length, type);
     private bufferToDetections(buffer, length);
     private _detectSync(net, meta, image, thresh?, hier_thresh?, nms?);
-    private _detectAsync(net, meta, image, thresh?, hier_thresh?, nms?);
+    protected _detectAsync(net: any, meta: any, image: any, thresh?: number, hier_thresh?: number, nms?: number): Promise<Detection[]>;
     /**
      * Synchronously detect objects in an image.
      * @param image the destination of the image to be detected
@@ -92,3 +92,4 @@ export interface Detection {
         h: number;
     };
 }
+export { DarknetExperimental } from './detector';

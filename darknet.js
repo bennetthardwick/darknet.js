@@ -70,7 +70,7 @@ var detection_pointer = ref.refType(DETECTION);
 var library = __dirname + "/libdarknet";
 var Darknet = /** @class */ (function () {
     /**
-     * A new instance of rjreddie's darknet. Create an instance as soon as possible in your app, because it takes a while to init.
+     * A new instance of pjreddie's darknet. Create an instance as soon as possible in your app, because it takes a while to init.
      * @param config
      */
     function Darknet(config) {
@@ -341,3 +341,5 @@ var Darknet = /** @class */ (function () {
     return Darknet;
 }());
 exports.Darknet = Darknet;
+var detector_1 = require("./detector");
+exports.DarknetExperimental = detector_1.DarknetExperimental;
