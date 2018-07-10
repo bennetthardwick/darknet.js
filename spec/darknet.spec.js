@@ -98,15 +98,29 @@ describe('darknet', () => {
         expect(JSON.stringify(giraffe)).toBe(JSON.stringify(GIRAFFE_RESULT));
     });
 
+    it('detects various images async (concurrent)', async () => {
+        darknet_a = new Darknet(config);
+        darknet_b = new Darknet(config);
+        darknet_c = new Darknet(config);
+
+        return Promise.all([
+            darknet_a.detectAsync(image('dog.jpg')),
+            darknet_b.detectAsync(image('eagle.jpg')),
+            darknet_c.detectAsync(image('giraffe.jpg'))
+        ]).then(values => {
+                expect(JSON.stringify(values[0])).toBe(JSON.stringify(DOG_RESULT));
+                expect(JSON.stringify(values[1])).toBe(JSON.stringify(EAGLE_RESULT));
+                expect(JSON.stringify(values[2])).toBe(JSON.stringify(GIRAFFE_RESULT));
+            });
+    });
+
     describe('experimental', () => {
-
-
         it('detects images async', async () => {
             darknet = new DarknetExperimental(config);
             return Promise.all([
-                darknet.detect(image('dog.jpg')),
-                darknet.detect(image('eagle.jpg')),
-                darknet.detect(image('giraffe.jpg'))
+                darknet.detectAsync(image('dog.jpg')),
+                darknet.detectAsync(image('eagle.jpg')),
+                darknet.detectAsync(image('giraffe.jpg'))
             ]).then(values => {
                 expect(JSON.stringify(values[0])).toBe(JSON.stringify(DOG_RESULT));
                 expect(JSON.stringify(values[1])).toBe(JSON.stringify(EAGLE_RESULT));

@@ -40,7 +40,7 @@ const detection_pointer = ref.refType(DETECTION);
 
 const library = __dirname + "/libdarknet";
 
-export class Darknet {
+export class DarknetBase {
 
     darknet: any;
     meta: any;
@@ -374,4 +374,5 @@ export interface Detection {
     };
 }
 
-export { DarknetExperimental } from './detector';
+export { Darknet } from './detector';
+export { Darknet as DarknetExperimental } from './detector';

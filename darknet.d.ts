@@ -1,5 +1,5 @@
 /// <reference types="node" />
-export declare class Darknet {
+export declare class DarknetBase {
     darknet: any;
     meta: any;
     net: any;
@@ -92,4 +92,5 @@ export interface Detection {
         h: number;
     };
 }
-export { DarknetExperimental } from './detector';
+export { Darknet } from './detector';
+export { Darknet as DarknetExperimental } from './detector';

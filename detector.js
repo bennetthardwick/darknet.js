@@ -49,9 +49,9 @@ var darknet_1 = require("./darknet");
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
 var shortid_1 = require("shortid");
-var DarknetExperimental = /** @class */ (function (_super) {
-    __extends(DarknetExperimental, _super);
-    function DarknetExperimental(config) {
+var Darknet = /** @class */ (function (_super) {
+    __extends(Darknet, _super);
+    function Darknet(config) {
         var _this = _super.call(this, config) || this;
         _this.images$ = new rxjs_1.Subject();
         _this.completion$ = new rxjs_1.Subject();
@@ -60,7 +60,7 @@ var DarknetExperimental = /** @class */ (function (_super) {
         _this.completion$.next();
         return _this;
     }
-    DarknetExperimental.prototype.doAsyncDetection = function (image, config) {
+    Darknet.prototype.doAsyncDetection = function (image, config) {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             var thresh, hier_thresh, nms, darkNetLoadedImage, imageData, _a, detection;
@@ -101,13 +101,12 @@ var DarknetExperimental = /** @class */ (function (_super) {
             });
         });
     };
-    DarknetExperimental.prototype.subscribeToDetections = function () {
+    Darknet.prototype.subscribeToDetections = function () {
         var _this = this;
         rxjs_1.zip(this.images$, this.completion$)
             .subscribe(function (x) {
             _this.doAsyncDetection(x[0].image)
                 .then(function (dets) {
-                console.log('darknet finished');
                 _this.completion$.next();
                 _this.detection$.next({
                     id: x[0].id,
@@ -116,7 +115,7 @@ var DarknetExperimental = /** @class */ (function (_super) {
             }).catch(function (er) { return console.log(er); });
         });
     };
-    DarknetExperimental.prototype.detectAsync = function (image, options) {
+    Darknet.prototype.detectAsync = function (image, options) {
         var _this = this;
         var id = shortid_1.generate();
         this.images$.next({ id: id, image: image, options: options });
@@ -125,6 +124,6 @@ var DarknetExperimental = /** @class */ (function (_super) {
                 .pipe(operators_1.filter(function (det) { return det.id === id; }), operators_1.take(1)).subscribe(function (det) { return resolve(det.detections); });
         });
     };
-    return DarknetExperimental;
-}(darknet_1.Darknet));
-exports.DarknetExperimental = DarknetExperimental;
+    return Darknet;
+}(darknet_1.DarknetBase));
+exports.Darknet = Darknet;

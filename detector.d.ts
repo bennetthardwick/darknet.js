@@ -1,5 +1,5 @@
-import { Darknet, IDarknetConfig, IBufferImage, Detection, IConfig } from './darknet';
-export declare class DarknetExperimental extends Darknet {
+import { IDarknetConfig, IBufferImage, Detection, IConfig, DarknetBase } from './darknet';
+export declare class Darknet extends DarknetBase {
     private images$;
     private completion$;
     private detection$;

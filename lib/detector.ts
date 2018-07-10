@@ -1,4 +1,4 @@
-import { Darknet, IDarknetConfig, IBufferImage, Detection, IConfig } from './darknet';
+import { IDarknetConfig, IBufferImage, Detection, IConfig, DarknetBase } from './darknet';
 import { zip, Subject } from 'rxjs';
 import { filter, map, tap, take } from 'rxjs/operators';
 import { generate } from 'shortid';
@@ -14,7 +14,7 @@ interface IDetection {
     detections: Detection[]
 }
 
-export class DarknetExperimental extends Darknet {
+export class Darknet extends DarknetBase {
 
     private images$ = new Subject<IDetectMe>();
     private completion$ = new Subject();
@@ -56,7 +56,6 @@ export class DarknetExperimental extends Darknet {
             .subscribe(x => {
                 this.doAsyncDetection(x[0].image)
                     .then(dets => {
-                        console.log('darknet finished');
                         this.completion$.next();
                         this.detection$.next({
                             id: x[0].id,
