@@ -52,7 +52,7 @@ const { Darknet } = require('darknet');
 const darknet = new Darknet({
   weights: 'yolov3.weights',
   config: 'cfg/yolov3.cfg',
-  nameFile: 'data/coco.names'
+  namefile: 'data/coco.names'
 });
 
 const cap = new cv.VideoCapture('video.mp4');
