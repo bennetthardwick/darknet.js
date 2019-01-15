@@ -9,9 +9,9 @@ export declare class DarknetBase {
      * @param config
      */
     constructor(config: IDarknetConfig);
-    private getArrayFromBuffer(buffer, length, type);
-    private bufferToDetections(buffer, length);
-    private _detectSync(net, meta, image, thresh?, hier_thresh?, nms?);
+    private getArrayFromBuffer;
+    private bufferToDetections;
+    private _detectSync;
     protected _detectAsync(net: any, meta: any, image: any, thresh?: number, hier_thresh?: number, nms?: number): Promise<Detection[]>;
     /**
      * Synchronously detect objects in an image.
@@ -37,7 +37,7 @@ export declare class DarknetBase {
      * @returns {Buffer}
      */
     imageToRGBBuffer(image: any): Buffer;
-    private rgbToDarknet(buffer, w, h, c);
+    private rgbToDarknet;
     /**
      * Transform an RGB buffer to a darknet encoded image
      * @param buffer - rgb buffer

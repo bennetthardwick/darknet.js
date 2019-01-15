@@ -14,8 +14,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
         while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
                 case 0: case 1: t = op; break;
                 case 4: _.label++; return { value: op[1], done: false };
@@ -151,8 +151,8 @@ var DarknetBase = /** @class */ (function () {
     };
     DarknetBase.prototype._detectAsync = function (net, meta, image, thresh, hier_thresh, nms) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             var pnum, dets, num, detections;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, new Promise(function (res, rej) {
@@ -283,8 +283,8 @@ var DarknetBase = /** @class */ (function () {
      */
     DarknetBase.prototype.RGBBufferToImageAsync = function (buffer, w, h, c) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             var floatBuff;
+            var _this = this;
             return __generator(this, function (_a) {
                 floatBuff = this.rgbToDarknet(buffer, w, h, c);
                 return [2 /*return*/, new Promise(function (res, rej) { return _this.darknet.float_to_image.async(w, h, c, new Uint8Array(floatBuff.buffer, 0, floatBuff.length * Float32Array.BYTES_PER_ELEMENT), function (e, image) { return e ? rej(e) : res(image); }); })];
@@ -299,8 +299,8 @@ var DarknetBase = /** @class */ (function () {
      */
     DarknetBase.prototype.detectAsync = function (image, config) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             var thresh, hier_thresh, nms, darkNetLoadedImage, imageData, _a, detection;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:

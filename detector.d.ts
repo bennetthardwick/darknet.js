@@ -4,7 +4,7 @@ export declare class Darknet extends DarknetBase {
     private completion$;
     private detection$;
     constructor(config: IDarknetConfig);
-    private doAsyncDetection(image, config?);
-    private subscribeToDetections();
+    private doAsyncDetection;
+    private subscribeToDetections;
     detectAsync(image: string | IBufferImage, options?: IConfig): Promise<Detection[]>;
 }
