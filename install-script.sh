@@ -39,8 +39,8 @@ esac
 
 sed -i -e "s/GPU=[01]/GPU=${GPU}/g" ./Makefile
 sed -i -e "s/CUDNN=[01]/CUDNN=${CUDNN}/g" ./Makefile
-sed -i -e "s/OPENCV=[01]/OPENCV=${GPU}/g" ./Makefile
-sed -i -e "s/OPENMP=[01]/OPENMP=${GPU}/g" ./Makefile
+sed -i -e "s/OPENCV=[01]/OPENCV=${OPENCV}/g" ./Makefile
+sed -i -e "s/OPENMP=[01]/OPENMP=${OPENMP}/g" ./Makefile
 
 make
 
