@@ -79,7 +79,6 @@ You can download pre-trained weights and configuration from pjreddie's website. 
 
 If you don't want to download that stuff manually, navigate to the `examples` directory and issue the `./example` command. This will download the necessary files and run some detections.
 
-```
 ## Built-With
 - [Node FFI](https://github.com/node-ffi/node-ffi)
 - [Ref](https://github.com/TooTallNate/ref)
