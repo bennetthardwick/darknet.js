@@ -2,6 +2,9 @@ node_modules/
 libdarknet*
 darknet/
 
+*.js
+*.d.ts
+
 examples/dog.jpg
 examples/eagle.jpg
 examples/giraffe.jpg
