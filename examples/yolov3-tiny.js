@@ -6,6 +6,14 @@ const darknet = new Darknet({
     namefile: 'coco.names'
 });
 
-console.log("Dog:", darknet.detect('./dog.jpg'));
-console.log("Eagle:", darknet.detect('./eagle.jpg'));
-console.log("Giraffe:", darknet.detect('./giraffe.jpg'));
+darknet.detectAsync('./dog.jpg')
+    .then(console.log);
+
+
+setTimeout(() => {darknet.detectAsync('./dog.jpg')
+    .then(console.log)}, 5000);
+
+
+// console.log("Dog:", darknet.detect('./dog.jpg'));
+// console.log("Eagle:", darknet.detect('./eagle.jpg'));
+// console.log("Giraffe:", darknet.detect('./giraffe.jpg'));
