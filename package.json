@@ -1,6 +1,6 @@
 {
   "name": "darknet",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "",
   "main": "darknet.js",
   "typings": "darknet.d.ts",
@@ -28,6 +28,7 @@
     "node": "<=8.11.2"
   },
   "devDependencies": {
+    "@types/node": "^12.6.2",
     "@types/shortid": "0.0.29",
     "jasmine": "^3.1.0",
     "node-addon-api": "^1.6.3",
