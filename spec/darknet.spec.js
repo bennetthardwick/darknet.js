@@ -1,4 +1,4 @@
-const { Darknet, DarknetExperimental } = require('../darknet');
+const { Darknet } = require('../darknet');
 const path = require('path');
 
 const config = {
@@ -90,45 +90,48 @@ describe('darknet', () => {
 
     it('detects various images', () => {
         darknet = new Darknet(config);
+
         const dog = darknet.detect(image('dog.jpg'));
-        expect(JSON.stringify(dog)).toBe(JSON.stringify(DOG_RESULT));
+        expect(dog).toEqual(DOG_RESULT);
+
         const eagle = darknet.detect(image('eagle.jpg'));
-        expect(JSON.stringify(eagle)).toBe(JSON.stringify(EAGLE_RESULT));
+        expect(eagle).toEqual(EAGLE_RESULT);
+
         const giraffe = darknet.detect(image('giraffe.jpg'));
-        expect(JSON.stringify(giraffe)).toBe(JSON.stringify(GIRAFFE_RESULT));
+        expect(giraffe).toEqual(GIRAFFE_RESULT);
     });
 
-    it('detects various images async (concurrent)', async () => {
-        darknet_a = new Darknet(config);
-        darknet_b = new Darknet(config);
-        darknet_c = new Darknet(config);
+    // xit('detects various images async (concurrent)', async () => {
+    //     darknet_a = new Darknet(config);
+    //     darknet_b = new Darknet(config);
+    //     darknet_c = new Darknet(config);
 
-        return Promise.all([
-            darknet_a.detectAsync(image('dog.jpg')),
-            darknet_b.detectAsync(image('eagle.jpg')),
-            darknet_c.detectAsync(image('giraffe.jpg'))
-        ]).then(values => {
-                expect(JSON.stringify(values[0])).toBe(JSON.stringify(DOG_RESULT));
-                expect(JSON.stringify(values[1])).toBe(JSON.stringify(EAGLE_RESULT));
-                expect(JSON.stringify(values[2])).toBe(JSON.stringify(GIRAFFE_RESULT));
-            });
-    });
+    //     return Promise.all([
+    //         darknet_a.detectAsync(image('dog.jpg')),
+    //         darknet_b.detectAsync(image('eagle.jpg')),
+    //         darknet_c.detectAsync(image('giraffe.jpg'))
+    //     ]).then(values => {
+    //             expect(JSON.stringify(values[0])).toBe(JSON.stringify(DOG_RESULT));
+    //             expect(JSON.stringify(values[1])).toBe(JSON.stringify(EAGLE_RESULT));
+    //             expect(JSON.stringify(values[2])).toBe(JSON.stringify(GIRAFFE_RESULT));
+    //         });
+    // });
 
-    describe('experimental', () => {
-        it('detects images async', async () => {
-            darknet = new DarknetExperimental(config);
-            return Promise.all([
-                darknet.detectAsync(image('dog.jpg')),
-                darknet.detectAsync(image('eagle.jpg')),
-                darknet.detectAsync(image('giraffe.jpg'))
-            ]).then(values => {
-                expect(JSON.stringify(values[0])).toBe(JSON.stringify(DOG_RESULT));
-                expect(JSON.stringify(values[1])).toBe(JSON.stringify(EAGLE_RESULT));
-                expect(JSON.stringify(values[2])).toBe(JSON.stringify(GIRAFFE_RESULT));
-            });
-        });
+    // describe('experimental', () => {
+    //     xit('detects images async', async () => {
+    //         darknet = new DarknetExperimental(config);
+    //         return Promise.all([
+    //             darknet.detectAsync(image('dog.jpg')),
+    //             darknet.detectAsync(image('eagle.jpg')),
+    //             darknet.detectAsync(image('giraffe.jpg'))
+    //         ]).then(values => {
+    //             expect(JSON.stringify(values[0])).toBe(JSON.stringify(DOG_RESULT));
+    //             expect(JSON.stringify(values[1])).toBe(JSON.stringify(EAGLE_RESULT));
+    //             expect(JSON.stringify(values[2])).toBe(JSON.stringify(GIRAFFE_RESULT));
+    //         });
+    //     });
 
-    })
+    // })
 
 });
 

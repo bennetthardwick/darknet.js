@@ -74,8 +74,9 @@ Value Detector::detectImagePath(const CallbackInfo &info) {
   float heir = info[2].ToNumber();
   float nms = info[3].ToNumber();
 
-  char *imageLocation = const_cast<char *>(
-      static_cast<std::string>(info[0].As<String>()).c_str());
+  std::string location = info[0].As<String>();
+
+  char* imageLocation = const_cast<char *>(location.c_str());
 
   image loadedImage = load_image_color(imageLocation, 0, 0);
 
@@ -140,15 +141,15 @@ Array Detector::detectImageInternal(Napi::Env env, image image, float thresh,
     for (int j = 0; j < this->classes; j++) {
       if (prob[j] > 0) {
 
-        Object bbox = Object::New(env);
+        Object box = Object::New(env);
 
-        bbox.Set("w", Number::New(env, a.bbox.w));
-        bbox.Set("h", Number::New(env, a.bbox.h));
-        bbox.Set("x", Number::New(env, a.bbox.x));
-        bbox.Set("y", Number::New(env, a.bbox.y));
+        box.Set("w", Number::New(env, a.bbox.w));
+        box.Set("h", Number::New(env, a.bbox.h));
+        box.Set("x", Number::New(env, a.bbox.x));
+        box.Set("y", Number::New(env, a.bbox.y));
 
         Object detected = Object::New(env);
-        detected.Set("bbox", bbox);
+        detected.Set("box", box);
         detected.Set("prob", Number::New(env, prob[j]));
         detected.Set("name", String::New(env, this->names[j]));
 

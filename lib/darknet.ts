@@ -71,7 +71,7 @@ export class Darknet {
         );
     }
 
-    detect(path: string, config?: IConfig): Detection[] {
+    detect(path: string, config: IConfig = {}): Detection[] {
         const thresh = (config.thresh !== undefined) ? config.thresh : 0.5;
         const hier = (config.hier_thresh !== undefined) ? config.hier_thresh : 0.5;
         const nms = (config.nms !== undefined) ? config.nms : 0.5;
