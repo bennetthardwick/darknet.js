@@ -1,6 +1,8 @@
 node_modules/
 libdarknet*
 darknet/
+include/
+build/
 
 *.js
 *.d.ts

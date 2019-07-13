@@ -7,11 +7,13 @@
   "repository": "https://github.com/bennetthardwick/darknet.js",
   "homepage": "https://github.com/bennetthardwick/darknet.js",
   "scripts": {
+    "build": "node-gyp rebuild",
+    "clean": "node-gyp clean",
     "test": "./examples/example && jasmine",
     "install": "./install-script.sh",
-    "prepublishOnly": "npx tsc",
-    "clean": "rm libdarknet.*"
+    "prepublishOnly": "npx tsc"
   },
+  "gypfile": true,
   "keywords": [
     "darknet",
     "yolo",
