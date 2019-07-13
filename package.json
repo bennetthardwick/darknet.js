@@ -10,7 +10,8 @@
     "build": "node-gyp rebuild",
     "clean": "node-gyp clean",
     "test": "./examples/example && jasmine",
-    "install": "./install-script.sh && npm run build",
+    "install": "./install-script.sh",
+    "postinstall": "npm run build",
     "prepublishOnly": "npx tsc"
   },
   "gypfile": true,
@@ -27,12 +28,14 @@
   "engines": {
     "node": "<=8.11.2"
   },
+  "dependencies": {
+    "node-addon-api": "^1.6.3",
+    "node-gyp": "^5.0.2"
+  },
   "devDependencies": {
     "@types/node": "^12.6.2",
     "@types/shortid": "0.0.29",
     "jasmine": "^3.1.0",
-    "node-addon-api": "^1.6.3",
-    "node-gyp": "^5.0.2",
     "typescript": "^3.5.3"
   }
 }
