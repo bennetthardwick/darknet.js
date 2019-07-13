@@ -10,7 +10,7 @@
     "build": "node-gyp rebuild",
     "clean": "node-gyp clean",
     "test": "./examples/example && jasmine",
-    "install": "./install-script.sh",
+    "install": "./install-script.sh && npm build",
     "prepublishOnly": "npx tsc"
   },
   "gypfile": true,
