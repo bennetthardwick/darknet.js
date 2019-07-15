@@ -9,6 +9,47 @@ export interface IBufferImage {
     c: number
 }
 
+export interface IOpenCVFrame {
+    channels: number;
+    cols: number;
+    rows: number;
+    getData: () => Buffer;
+}
+
+function isIOpenCVFrame(input: any): input is IOpenCVFrame {
+    return (
+        'channels' in input &&
+        'cols' in input &&
+        'rows' in input &&
+        'getData' in input &&
+        typeof input.channels === 'number' &&
+        typeof input.cols === 'number' &&
+        typeof input.rows === 'number' &&
+        typeof input.getData === 'function'
+    );
+}
+
+function isIBufferImage(input: any): input is IBufferImage {
+    return (
+        'b' in input &&
+        'w' in input &&
+        'h' in input &&
+        'c' in input &&
+        typeof input.b === 'number' &&
+        typeof input.w === 'number' &&
+        typeof input.h === 'number' &&
+        input.buffer instanceof Buffer
+    );
+}
+
+
+interface IDarknetImage {
+    w: number;
+    h: number;
+    c: number;
+    buffer: Uint8Array;
+}
+
 export interface IDarknetConfig {
     weights: string;
     config: string;
@@ -47,12 +88,21 @@ interface Detector {
         heir: number,
         nms: number
     ): Detection[];
+
+    detectImageBuffer(
+        buffer: ArrayBuffer,
+        w: number,
+        h: number,
+        c: number,
+        thresh: number,
+        heir: number,
+        nms: number
+    ): Detection[];
 }
 
 export class Darknet {
 
     private detector: Detector;
-    private names: string[];
 
     constructor(config: IDarknetConfig) {
         if (!config) throw new Error("A config file is required");
@@ -62,8 +112,6 @@ export class Darknet {
         if (!config.config) throw new Error("Config must include location to yolo config file");
         if (!config.weights) throw new Error("config must include the path to trained weights");
 
-        this.names = config.names;
-
         this.detector = new Detector(
             config.weights,
             config.config,
@@ -71,12 +119,72 @@ export class Darknet {
         );
     }
 
-    detect(path: string, config: IConfig = {}): Detection[] {
+    private rgbBufferToDarknet(buffer: Buffer, w: number, h: number, c: number): Float32Array {
+        const imageElements = w * h * c;
+        const floatBuff = new Float32Array(imageElements);
+        const step = w * c;
+
+        let i: number, k: number, j: number;
+        for (i = 0; i < h; ++i) {
+            for (k = 0; k < c; ++k) {
+                for (j = 0; j < w; ++j) {
+                    floatBuff[k * w * h + i * w + j] = buffer[i * step + j * c + k] / 255;
+                }
+            }
+        }
+
+        return floatBuff;
+    }
+
+    private formatIBufferImage(image: IBufferImage): IDarknetImage {
+        const {b, w, h, c} = image;
+        const floatBuff = this.rgbBufferToDarknet(b, w, h, c);
+
+        return {
+            w, h, c,
+            buffer: new Uint8Array(
+                floatBuff.buffer,
+                0,
+                floatBuff.length * Float32Array.BYTES_PER_ELEMENT
+            )
+        }
+    }
+
+    detect(input: string | IBufferImage | IOpenCVFrame, config: IConfig = {}): Detection[] {
         const thresh = (config.thresh !== undefined) ? config.thresh : 0.5;
         const hier = (config.hier_thresh !== undefined) ? config.hier_thresh : 0.5;
         const nms = (config.nms !== undefined) ? config.nms : 0.5;
 
-        return this.detector.detectImagePath(path, thresh, hier, nms)
+        if (typeof input === 'string') {
+            return this.detector.detectImagePath(input, thresh, hier, nms)
+        } else {
+            let image: IDarknetImage | undefined;
+            if (isIBufferImage(input)) {
+                image = this.formatIBufferImage(input);
+            } else if (isIOpenCVFrame(input)) {
+                const buffer = input.getData();
+
+                if (buffer instanceof Buffer) {
+                    image = this.formatIBufferImage({
+                        w: input.cols,
+                        h: input.rows,
+                        c: input.channels,
+                        b: buffer
+                    });
+                } else {
+                    throw new Error('getData did not return buffer!');
+                }
+            }
+
+            if (image) {
+                const {buffer, w, h, c} = image;
+                return this.detector.detectImageBuffer(buffer, w, h, c, thresh, hier, nms);
+
+            } else {
+                throw new Error('Could not get valid image from input!');
+            }
+        }
+
     }
 
 }

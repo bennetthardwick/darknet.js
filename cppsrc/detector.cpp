@@ -95,20 +95,20 @@ Value Detector::detectImageBuffer(const CallbackInfo &info) {
 
   // buffer, w, h, c, thresh, hier, nms
 
-  if (length != 7 || !info[0].IsArrayBuffer() || !info[1].IsNumber() ||
+  if (length != 7 || !info[0].IsTypedArray() || !info[1].IsNumber() ||
       !info[2].IsNumber() || !info[3].IsNumber() || !info[4].IsNumber() ||
       !info[5].IsNumber() || !info[6].IsNumber()) {
     TypeError::New(env, "Please provide correct config!")
         .ThrowAsJavaScriptException();
   }
 
-  ArrayBuffer buffer = info[0].As<ArrayBuffer>();
+  TypedArray buffer = info[0].As<TypedArray>();
 
   float w = info[1].ToNumber();
   float h = info[2].ToNumber();
   float c = info[3].ToNumber();
 
-  image i = float_to_image(w, h, c, static_cast<float *>(buffer.Data()));
+  image i = float_to_image(w, h, c, static_cast<float *>(buffer.ArrayBuffer().Data()));
 
   float thresh = info[4].ToNumber();
   float heir = info[5].ToNumber();
