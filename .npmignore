@@ -1,6 +1,8 @@
 lib/
 examples/
 build/
+include/
+spec/
 darknet/
 libdarknet*
 tsconfig.json
