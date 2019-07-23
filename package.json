@@ -11,7 +11,6 @@
     "clean": "node-gyp clean",
     "test": "./examples/example && jasmine",
     "install": "./install-script.sh",
-    "postinstall": "npm run build",
     "prepublishOnly": "npx tsc"
   },
   "gypfile": true,
