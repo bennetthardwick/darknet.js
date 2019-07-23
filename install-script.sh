@@ -70,5 +70,3 @@ if [ $CUDNN = 1 ]; then
     export DARKNET_DEFINES="$DARKNET_DEFINES CUDNN"
     export DARKNET_FLAGS="$DARKNET_FLAGS -l cudnn"
 fi
-
-npx node-gyp rebuild
