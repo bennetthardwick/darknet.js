@@ -2,6 +2,7 @@
     "variables": {
         'gpu%': '<!(echo $DARKNET_BUILD_WITH_GPU)',
         'cudnn%': '<!(echo $DARKNET_BUILD_WITH_CUDNN)',
+        'openmp%': '<!(echo $DARKNET_BUILD_WITH_OPENMP)',
     },
 
     "targets": [{
@@ -27,6 +28,11 @@
                 ],
                 'libraries': [
                     '-lcudnn'
+                ]
+            }],
+            [ 'openmp==1', {
+                'libraries': [
+                    '-fopenmp'
                 ]
             }]
         ],
