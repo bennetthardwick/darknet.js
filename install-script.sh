@@ -60,3 +60,15 @@ cd ..
 if [[ "$OSTYPE" == "darwin"* ]]; then
     ln -s libdarknet.so libdarknet.dylib
 fi
+
+if [ $GPU = 1 ]; then
+    export DARKNET_DEFINES="GPU"
+    export DARKNET_FLAGS="-L/usr/local/cuda/lib64 -lcuda -lcudart -lcublas -lcurand"
+fi
+
+if [ $CUDNN = 1 ]; then
+    export DARKNET_DEFINES="$DARKNET_DEFINES CUDNN"
+    export DARKNET_FLAGS="$DARKNET_FLAGS -l cudnn"
+fi
+
+npx node-gyp rebuild

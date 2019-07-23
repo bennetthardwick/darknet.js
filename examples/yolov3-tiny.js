@@ -6,13 +6,7 @@ const darknet = new Darknet({
     namefile: 'coco.names'
 });
 
-darknet.detectAsync('./dog.jpg')
-    .then(console.log);
-
-
-setTimeout(() => {darknet.detectAsync('./dog.jpg')
-    .then(console.log)}, 5000);
-
+console.log(darknet.detect('./dog.jpg'))
 
 // console.log("Dog:", darknet.detect('./dog.jpg'));
 // console.log("Eagle:", darknet.detect('./eagle.jpg'));
