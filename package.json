@@ -24,16 +24,12 @@
   ],
   "author": "Bennett Hardwick <bennetthardwick@icloud.com> (bennetthardwick.com)",
   "license": "MIT",
-  "engines": {
-    "node": "<=8.11.2"
-  },
   "dependencies": {
     "node-addon-api": "^1.6.3",
     "node-gyp": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^12.6.2",
-    "@types/shortid": "0.0.29",
     "jasmine": "^3.1.0",
     "typescript": "^3.5.3"
   }
