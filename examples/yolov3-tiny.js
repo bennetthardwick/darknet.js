@@ -6,8 +6,6 @@ const darknet = new Darknet({
     namefile: 'coco.names'
 });
 
-console.log(darknet.detect('./dog.jpg'))
-
-// console.log("Dog:", darknet.detect('./dog.jpg'));
-// console.log("Eagle:", darknet.detect('./eagle.jpg'));
-// console.log("Giraffe:", darknet.detect('./giraffe.jpg'));
+console.log("Dog:", darknet.detect('./dog.jpg'));
+console.log("Eagle:", darknet.detect('./eagle.jpg'));
+console.log("Giraffe:", darknet.detect('./giraffe.jpg'));
