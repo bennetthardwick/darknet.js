@@ -1,17 +1,19 @@
 {
   "name": "darknet",
-  "version": "1.3.9",
+  "version": "2.0.10",
   "description": "",
   "main": "darknet.js",
   "typings": "darknet.d.ts",
   "repository": "https://github.com/bennetthardwick/darknet.js",
   "homepage": "https://github.com/bennetthardwick/darknet.js",
   "scripts": {
+    "build": "./install-script.sh && node-gyp rebuild",
+    "clean": "node-gyp clean",
     "test": "./examples/example && jasmine",
-    "install": "./install-script.sh",
-    "prepublishOnly": "npx tsc",
-    "clean": "rm libdarknet.*"
+    "install": "./install-script.sh && node-gyp rebuild",
+    "prepublishOnly": "npx tsc"
   },
+  "gypfile": true,
   "keywords": [
     "darknet",
     "yolo",
@@ -23,21 +25,12 @@
   "author": "Bennett Hardwick <bennetthardwick@icloud.com> (bennetthardwick.com)",
   "license": "MIT",
   "dependencies": {
-    "ffi": "^2.3.0",
-    "ref": "^1.3.5",
-    "ref-struct": "^1.1.0",
-    "rxjs": "^6.2.1",
-    "shortid": "^2.2.8",
-    "typescript": "^3.2.2"
-  },
-  "engines": {
-    "node": "<=8.11.2"
+    "node-addon-api": "^1.6.3",
+    "node-gyp": "^5.0.2"
   },
   "devDependencies": {
-    "@types/ffi": "^0.1.0",
-    "@types/ref": "0.0.28",
-    "@types/ref-struct": "0.0.29",
-    "@types/shortid": "0.0.29",
-    "jasmine": "^3.1.0"
+    "@types/node": "^12.6.2",
+    "jasmine": "^3.1.0",
+    "typescript": "^3.5.3"
   }
 }

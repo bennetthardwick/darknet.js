@@ -3,7 +3,7 @@ A Node wrapper of pjreddie's open source neural network framework Darknet, using
 
 ## Prerequisites
 - Linux, Mac, Windows (Linux sub-system),
-- Node (most versions will work, darknet.js <=1.1.5 only works on node <=8.11.2)
+- Node
 - Build tools (make, gcc, etc.)
 
 ## Examples
@@ -16,7 +16,7 @@ npm install
 Note: The example weights are quite large, the download might take some time
 
 ## Installation
-Super easy, just install it with npm:
+You can install darknet with npm using the following command:
 ```
 npm install darknet
 ```
@@ -26,6 +26,8 @@ export DARKNET_BUILD_WITH_GPU=1
 export DARKNET_BUILD_WITH_CUDNN=1
 npm rebuild darknet
 ```
+
+You can enable OpenMP by also exporting the flag `DARKNET_BUILD_WITH_OPENMP=1`;
 
 ## Usage
 To create an instance of darknet.js, you need a three things. The trained weights, the configuration file they were trained with and a list of the names of all the classes.
@@ -61,13 +63,7 @@ let frame;
 let index = 0;
 do {
   frame = cap.read().cvtColor(cv.COLOR_BGR2RGB);
-  console.log('frame', index++); 
-  console.log(darknet.detect({
-    b: frame.getData(),
-    w: frame.cols,
-    h: frame.rows,
-    c: frame.channels
-  }));
+  console.log(darknet.detect(frame));
 } while(!frame.empty);
 ```
 
@@ -80,6 +76,4 @@ You can download pre-trained weights and configuration from pjreddie's website. 
 If you don't want to download that stuff manually, navigate to the `examples` directory and issue the `./example` command. This will download the necessary files and run some detections.
 
 ## Built-With
-- [Node FFI](https://github.com/node-ffi/node-ffi)
-- [Ref](https://github.com/TooTallNate/ref)
 - [Darknet](https://github.com/pjreddie/darknet)
