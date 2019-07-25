@@ -62,6 +62,7 @@ export interface IConfig {
     thresh?: number;
     hier_thresh?: number;
     nms?: number;
+    relative?: boolean;
 }
 
 export interface Detection {
@@ -86,7 +87,8 @@ interface Detector {
         path: string,
         thresh: number,
         heir: number,
-        nms: number
+        nms: number,
+        rel: number
     ): Detection[];
 
     detectImageBuffer(
@@ -96,7 +98,8 @@ interface Detector {
         c: number,
         thresh: number,
         heir: number,
-        nms: number
+        nms: number,
+        rel: number
     ): Detection[];
 }
 
@@ -154,9 +157,10 @@ export class Darknet {
         const thresh = (config.thresh !== undefined) ? config.thresh : 0.5;
         const hier = (config.hier_thresh !== undefined) ? config.hier_thresh : 0.5;
         const nms = (config.nms !== undefined) ? config.nms : 0.5;
+        const rel = config.relative ? 1 : 0;
 
         if (typeof input === 'string') {
-            return this.detector.detectImagePath(input, thresh, hier, nms)
+            return this.detector.detectImagePath(input, thresh, hier, nms, rel)
         } else {
             let image: IDarknetImage | undefined;
             if (isIBufferImage(input)) {
@@ -178,7 +182,7 @@ export class Darknet {
 
             if (image) {
                 const {buffer, w, h, c} = image;
-                return this.detector.detectImageBuffer(buffer, w, h, c, thresh, hier, nms);
+                return this.detector.detectImageBuffer(buffer, w, h, c, thresh, hier, nms, rel);
 
             } else {
                 throw new Error('Could not get valid image from input!');

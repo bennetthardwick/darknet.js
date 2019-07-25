@@ -22,7 +22,8 @@ private:
       image image,
       float thresh,
       float heir,
-      float nms
+      float nms,
+      int rel
   );
 
   static Napi::FunctionReference constructor;

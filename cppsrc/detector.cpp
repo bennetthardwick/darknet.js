@@ -64,8 +64,8 @@ Value Detector::detectImagePath(const CallbackInfo &info) {
 
   int length = info.Length();
 
-  if (length != 4 || !info[0].IsString() || !info[1].IsNumber() ||
-      !info[2].IsNumber() || !info[3].IsNumber()) {
+  if (length != 5 || !info[0].IsString() || !info[1].IsNumber() ||
+      !info[2].IsNumber() || !info[3].IsNumber() || !info[4].IsNumber()) {
     TypeError::New(env, "Please provide correct config!")
         .ThrowAsJavaScriptException();
   }
@@ -74,13 +74,15 @@ Value Detector::detectImagePath(const CallbackInfo &info) {
   float heir = info[2].ToNumber();
   float nms = info[3].ToNumber();
 
+  int rel = info[4].ToNumber();
+
   std::string location = info[0].As<String>();
 
   char* imageLocation = const_cast<char *>(location.c_str());
 
   image loadedImage = load_image_color(imageLocation, 0, 0);
 
-  Array det = this->detectImageInternal(env, loadedImage, thresh, heir, nms);
+  Array det = this->detectImageInternal(env, loadedImage, thresh, heir, nms, rel);
 
   free_image(loadedImage);
 
@@ -95,9 +97,9 @@ Value Detector::detectImageBuffer(const CallbackInfo &info) {
 
   // buffer, w, h, c, thresh, hier, nms
 
-  if (length != 7 || !info[0].IsTypedArray() || !info[1].IsNumber() ||
+  if (length != 8 || !info[0].IsTypedArray() || !info[1].IsNumber() ||
       !info[2].IsNumber() || !info[3].IsNumber() || !info[4].IsNumber() ||
-      !info[5].IsNumber() || !info[6].IsNumber()) {
+      !info[5].IsNumber() || !info[6].IsNumber() || !info[7].IsNumber()) {
     TypeError::New(env, "Please provide correct config!")
         .ThrowAsJavaScriptException();
   }
@@ -113,22 +115,27 @@ Value Detector::detectImageBuffer(const CallbackInfo &info) {
   float thresh = info[4].ToNumber();
   float heir = info[5].ToNumber();
   float nms = info[6].ToNumber();
+  
+  int rel = info[7].ToNumber();
 
-  Array det = this->detectImageInternal(env, i, thresh, heir, nms);
+  Array det = this->detectImageInternal(env, i, thresh, heir, nms, rel);
 
   return det;
 }
 
 Array Detector::detectImageInternal(Napi::Env env, image image, float thresh,
-                                    float hier, float nms) {
+                                    float hier, float nms, int rel) {
 
   int total;
 
   network_predict_image(this->net, image);
 
   detection *dets = get_network_boxes(this->net, image.w, image.h, thresh, hier,
-                                      NULL, 0, &total);
-  do_nms_obj(dets, total, this->classes, nms);
+                                      NULL, rel, &total);
+
+  if (nms > 0) {
+    do_nms_obj(dets, total, this->classes, nms);
+  }
 
   Array ret = Array::New(env);
 
