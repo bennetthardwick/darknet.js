@@ -8,9 +8,14 @@ A Node wrapper of pjreddie's open source neural network framework Darknet, using
 
 ## Examples
 To run the examples, run the following commands:
-```
+```sh
+# Clone the repositorys
 git clone https://github.com/bennetthardwick/darknet.js.git darknet && cd darknet
+# Install dependencies and build Darknet
 npm install
+# Compile Darknet.js library
+npx tsc
+# Run examples
 ./examples/example
 ```
 Note: The example weights are quite large, the download might take some time
