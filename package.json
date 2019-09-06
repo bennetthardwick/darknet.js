@@ -1,6 +1,6 @@
 {
   "name": "darknet",
-  "version": "2.0.14",
+  "version": "2.0.15",
   "description": "",
   "main": "darknet.js",
   "typings": "darknet.d.ts",
