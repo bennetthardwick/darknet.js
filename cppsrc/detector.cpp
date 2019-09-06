@@ -30,8 +30,8 @@ Detector::Detector(const CallbackInfo &info) : ObjectWrap<Detector>(info) {
 
   int length = info.Length();
 
-  if (length != 3 || !info[0].IsString() || !info[1].IsString() ||
-      !info[2].IsString()) {
+  if (length != 4 || !info[0].IsString() || !info[1].IsString() ||
+      !info[2].IsString() || !info[3].IsNumber()) {
     TypeError::New(env, "Please provide correct config!")
         .ThrowAsJavaScriptException();
   }
@@ -39,6 +39,7 @@ Detector::Detector(const CallbackInfo &info) : ObjectWrap<Detector>(info) {
   std::string weights = info[0].As<String>();
   std::string config = info[1].As<String>();
   std::string names = info[2].As<String>();
+  float batchNetwork = info[3].ToNumber();
 
   std::string::size_type pos = 0;
   std::string::size_type prev = 0;
@@ -56,6 +57,11 @@ Detector::Detector(const CallbackInfo &info) : ObjectWrap<Detector>(info) {
   this->classes = this->names.size();
 
   this->net = load_network(this->config, this->weights, 0);
+
+  if (batchNetwork) {
+    set_batch_network(this->net, 1);
+  }
+
 }
 
 Value Detector::detectImagePath(const CallbackInfo &info) {

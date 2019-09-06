@@ -42,7 +42,6 @@ function isIBufferImage(input: any): input is IBufferImage {
     );
 }
 
-
 interface IDarknetImage {
     w: number;
     h: number;
@@ -56,6 +55,7 @@ export interface IDarknetConfig {
     names?: string[];
     namefile?: string;
     processes?: number;
+    batch?: boolean;
 }
 
 export interface IConfig {
@@ -80,7 +80,8 @@ interface Detector {
     new(
         weights: string,
         config: string,
-        classes: number
+        classes: number,
+        batch: boolean
     ): Detector;
 
     detectImagePath(
@@ -118,7 +119,8 @@ export class Darknet {
         this.detector = new Detector(
             config.weights,
             config.config,
-            config.names.join('\n')
+            config.names.join('\n'),
+            config.batch ? 1 : 0
         );
     }
 
