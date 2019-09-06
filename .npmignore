@@ -4,3 +4,4 @@ build/
 darknet/
 libdarknet*
 tsconfig.json
+.ccls-cache/
