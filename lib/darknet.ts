@@ -35,10 +35,10 @@ function isIBufferImage(input: any): input is IBufferImage {
         'w' in input &&
         'h' in input &&
         'c' in input &&
-        typeof input.b === 'number' &&
+        typeof input.c === 'number' &&
         typeof input.w === 'number' &&
         typeof input.h === 'number' &&
-        input.buffer instanceof Buffer
+        input.b instanceof Buffer
     );
 }
 
