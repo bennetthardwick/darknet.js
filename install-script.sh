@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 if [ ! -d darknet ]; then
-    git clone https://github.com/pjreddie/darknet;
+    git clone https://github.com/AlexeyAB/darknet --depth=1;
 
     if [ $? -ne 0 ]; then
         echo "Could not clone darknet repo";
@@ -15,7 +15,8 @@ cd darknet
 GPU="${DARKNET_BUILD_WITH_GPU:-0}";
 CUDNN="${DARKNET_BUILD_WITH_CUDNN:-0}";
 OPENCV="${DARKNET_BUILD_WITH_OPENCV:-0}";
-OPENMP="${DARKNET_BUILD_WITH_OPENMP:-0}";
+OOPENMPPENMP="${DARKNET_BUILD_WITH_OPENMP:-0}";
+CUDNN_HALF="${DARKNET_BUILD_WITH_CUDNN_HALF:-0}";
 
 case "$GPU" in
     1|0);;
@@ -25,6 +26,11 @@ esac
 case "$CUDNN" in
     1|0);;
     *) echo "Interpreting DARKNET_BUILD_WITH_CUDNN=$CUDNN as 0"; CUDNN=0;;
+esac
+
+case "$CUDNN_HALF" in
+    1|0);;
+    *) echo "Interpreting DARKNET_BUILD_WITH_CUDNN_HALF=$CUDNN_HALF as 0"; CUDNN_HALF=0;;
 esac
 
 case "$OPENCV" in
@@ -41,6 +47,8 @@ sed -i -e "s/GPU=[01]/GPU=${GPU}/g" ./Makefile
 sed -i -e "s/CUDNN=[01]/CUDNN=${CUDNN}/g" ./Makefile
 sed -i -e "s/OPENCV=[01]/OPENCV=${OPENCV}/g" ./Makefile
 sed -i -e "s/OPENMP=[01]/OPENMP=${OPENMP}/g" ./Makefile
+sed -i -e "s/CUDNN_HALF=[01]/CUDNN_HALF=${CUDNN_HALF}/g" ./Makefile
+sed -i -e "s/LIBSO=[01]/LIBSO=1/g" ./Makefile
 
 make
 

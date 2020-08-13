@@ -58,9 +58,9 @@ Detector::Detector(const CallbackInfo &info) : ObjectWrap<Detector>(info) {
 
   this->net = load_network(this->config, this->weights, 0);
 
-  if (batchNetwork) {
-    set_batch_network(this->net, 1);
-  }
+  // if (batchNetwork) {
+  //   set_batch_network(this->net, 1);
+  // }
 
 }
 
@@ -116,7 +116,8 @@ Value Detector::detectImageBuffer(const CallbackInfo &info) {
   float h = info[2].ToNumber();
   float c = info[3].ToNumber();
 
-  image i = float_to_image(w, h, c, static_cast<float *>(buffer.ArrayBuffer().Data()));
+  image i = make_image(w, h, c);
+  i.data = static_cast<float *>(buffer.ArrayBuffer().Data());
 
   float thresh = info[4].ToNumber();
   float heir = info[5].ToNumber();
@@ -137,7 +138,7 @@ Array Detector::detectImageInternal(Napi::Env env, image image, float thresh,
   network_predict_image(this->net, image);
 
   detection *dets = get_network_boxes(this->net, image.w, image.h, thresh, hier,
-                                      NULL, rel, &total);
+                                      NULL, rel, &total, 0);
 
   if (nms > 0) {
     do_nms_obj(dets, total, this->classes, nms);
