@@ -46,7 +46,7 @@
             "darknet/include/",
         ],
         'libraries': [
-            "../libdarknet.so",
+            "<(module_root_dir)/libdarknet.so"
         ],
         'dependencies': [
             "<!(node -p \"require('node-addon-api').gyp\")"
