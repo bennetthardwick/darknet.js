@@ -8,6 +8,7 @@ build/
 *.d.ts
 
 examples/dog.jpg
+examples/dog-with-boxes.png
 examples/eagle.jpg
 examples/giraffe.jpg
 examples/yolov3-tiny.cfg
