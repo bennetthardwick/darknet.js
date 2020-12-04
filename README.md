@@ -43,6 +43,8 @@ npm rebuild darknet
 
 You can enable OpenMP by also exporting the flag `DARKNET_BUILD_WITH_OPENMP=1`;
 
+You can also build for a different architecture by using the `DARKNET_BUILD_WITH_ARCH` flag.
+
 ## Usage
 
 To create an instance of darknet.js, you need a three things. The trained weights, the configuration file they were trained with and a list of the names of all the classes.
