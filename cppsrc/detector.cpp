@@ -116,7 +116,10 @@ Value Detector::detectImageBuffer(const CallbackInfo &info) {
   float h = info[2].ToNumber();
   float c = info[3].ToNumber();
 
-  image i = make_image(w, h, c);
+  image i;
+  i.h = h;
+  i.w = w;
+  i.c = c;
   i.data = static_cast<float *>(buffer.ArrayBuffer().Data());
 
   float thresh = info[4].ToNumber();
@@ -126,8 +129,6 @@ Value Detector::detectImageBuffer(const CallbackInfo &info) {
   int rel = info[7].ToNumber();
 
   Array det = this->detectImageInternal(env, i, thresh, heir, nms, rel);
-
-  free_image(i);
 
   return det;
 }
