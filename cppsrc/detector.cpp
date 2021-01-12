@@ -127,6 +127,8 @@ Value Detector::detectImageBuffer(const CallbackInfo &info) {
 
   Array det = this->detectImageInternal(env, i, thresh, heir, nms, rel);
 
+  free_image(i);
+
   return det;
 }
 

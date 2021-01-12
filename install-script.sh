@@ -50,11 +50,11 @@ sed -i -e "s/OPENMP=[01]/OPENMP=${OPENMP}/g" ./Makefile
 sed -i -e "s/CUDNN_HALF=[01]/CUDNN_HALF=${CUDNN_HALF}/g" ./Makefile
 sed -i -e "s/LIBSO=[01]/LIBSO=1/g" ./Makefile
 
-if [ ! -z "${DARKNET_BUILD_WITH_ARCH?}" ]; then
+if [ ! -z "${DARKNET_BUILD_WITH_ARCH:-''}" ]; then
     # Remove trailing gencode lines
     sed -i -e "/^\s*-gencode/d" ./Makefile
     # Update the ARCH to be what was specified by the option
-    sed -i -e "s/^ARCH=.*$/ARCH=${DARKNET_BUILD_WITH_ARCH?}/g" ./Makefile
+    sed -i -e "s/^ARCH=.*$/ARCH=${DARKNET_BUILD_WITH_ARCH:-''}/g" ./Makefile
 fi
 
 make
