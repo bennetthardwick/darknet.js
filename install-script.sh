@@ -50,11 +50,23 @@ sed -i -e "s/OPENMP=[01]/OPENMP=${OPENMP}/g" ./Makefile
 sed -i -e "s/CUDNN_HALF=[01]/CUDNN_HALF=${CUDNN_HALF}/g" ./Makefile
 sed -i -e "s/LIBSO=[01]/LIBSO=1/g" ./Makefile
 
-if [ ! -z "${DARKNET_BUILD_WITH_ARCH:-''}" ]; then
-    # Remove trailing gencode lines
-    sed -i -e "/^\s*-gencode/d" ./Makefile
+DEFAULT_ARCH=" -gencode arch=compute_35,code=sm_35 \
+-gencode arch=compute_50,code=[sm_50,compute_50] \
+-gencode arch=compute_52,code=[sm_52,compute_52] \
+-gencode arch=compute_61,code=[sm_61,compute_61]"
+
+# Remove trailing gencode lines
+sed -i -e "/^\s*-gencode/d" ./Makefile
+
+if [ ! -z "${DARKNET_BUILD_WITH_ARCH:-""}" ]; then
+    echo ""
+    echo "Note: Passing custom ARCH for Darknet build"
+    echo""
+
     # Update the ARCH to be what was specified by the option
-    sed -i -e "s/^ARCH=.*$/ARCH=${DARKNET_BUILD_WITH_ARCH:-''}/g" ./Makefile
+    sed -i -e "s/^ARCH=.*$/ARCH=${DARKNET_BUILD_WITH_ARCH}/g" ./Makefile
+else
+    sed -i -e "s/^ARCH=.*$/ARCH=${DEFAULT_ARCH}/g" ./Makefile
 fi
 
 make
