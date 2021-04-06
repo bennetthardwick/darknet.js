@@ -4,7 +4,7 @@ A Node wrapper of pjreddie's open source neural network framework Darknet, using
 
 ## Prerequisites
 
-- Linux, Mac, Windows (Linux sub-system),
+- Linux, Windows (Linux sub-system),
 - Node
 - Build tools (make, gcc, etc.)
 
