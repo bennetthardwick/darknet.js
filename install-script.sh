@@ -76,17 +76,8 @@ if [ $? -ne 0 ]; then
     exit 2;
 fi
 
-# copy lib
-cp libdarknet* ..
-cp -r include/ ..
-
 # dive out
 cd ..
-
-# if macos make .dylib symlink
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    ln -s libdarknet.so libdarknet.dylib
-fi
 
 if [ $GPU = 1 ]; then
     export DARKNET_DEFINES="GPU"
