@@ -17,6 +17,7 @@ CUDNN="${DARKNET_BUILD_WITH_CUDNN:-0}";
 OPENCV="${DARKNET_BUILD_WITH_OPENCV:-0}";
 OPENMP="${DARKNET_BUILD_WITH_OPENMP:-0}";
 CUDNN_HALF="${DARKNET_BUILD_WITH_CUDNN_HALF:-0}";
+AVX="${DARKNET_BUILD_WITH_AVX:-0}";
 
 case "$GPU" in
     1|0);;
@@ -43,6 +44,12 @@ case "$OPENMP" in
     *) echo "Interpreting DARKNET_BUILD_WITH_OPENMP=$OPENMP as 0"; OPENMP=0;;
 esac
 
+case "$AVX" in
+    1|0);;
+    *) echo "Interpreting DARKNET_BUILD_WITH_AVX=$AVX as 0"; AVX=0;;
+esac
+
+sed -i -e "s/AVX=[01]/AVX=${AVX}/g" ./Makefile
 sed -i -e "s/GPU=[01]/GPU=${GPU}/g" ./Makefile
 sed -i -e "s/CUDNN=[01]/CUDNN=${CUDNN}/g" ./Makefile
 sed -i -e "s/OPENCV=[01]/OPENCV=${OPENCV}/g" ./Makefile
